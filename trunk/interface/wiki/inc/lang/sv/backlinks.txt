@@ -1,4 +1,0 @@
-======Tillbakalänkar======
-
-Detta är en förteckning över sidor som verkar länka tillbaka till den aktuella
-sidan.
