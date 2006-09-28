@@ -9,6 +9,7 @@ function get_terms($limit = 50, $category = false) {
 	}
 	$results = mysql_query($query);
 	$terms = array();
+	
 	while ($row = mysql_fetch_array($results)) {
 		$terms[$row['term']] = $row['count'];
 	}

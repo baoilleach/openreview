@@ -169,8 +169,12 @@
 	$xml = post_freq_xml($safe_category);
 	
 	$file = fopen("xml/sample.xml", "w");
-	fwrite($file, $xml);
-	fclose($file);
+	if ($file) {
+		fwrite($file, $xml);
+		fclose($file);
+	} else {
+		print "<p>An error occurred: Couldn't write out the XML for the Flash graph. Perhaps your webserver doesn't have write permission in the xml subdirectory of the interface?";
+	}
 	
 ?>
 <h3>Posting Frequency</h3>

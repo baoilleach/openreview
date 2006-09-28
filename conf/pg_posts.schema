@@ -1,7 +1,3 @@
-drop database if exists pg_posts;
-create database pg_posts;
-use pg_posts;
-
 create table posts (
 post_id bigint auto_increment primary key,
 blog_id	bigint,
@@ -22,6 +18,11 @@ create index blog_id_idx ON posts (blog_id);
 create index pubdate_idx ON posts (pubdate);
 create index added_on_idx ON posts (added_on);
 create index url_hash_idx ON posts (url_hash);
+
+create table bursts (
+term varchar(255) primary key,
+score float
+);
 
 create table blogs (
 blog_id	bigint primary key auto_increment,

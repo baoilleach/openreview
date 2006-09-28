@@ -33,7 +33,10 @@ To initialize the database:
 
 Let your webserver know where to serve documents from:
 
-1) You need to make the interface subdirectory available through your web server - perhaps with a symbolic link?
+1) You need to make the interface subdirectory available through your web server - perhaps with a symbolic link? If you're trying things out, note that you'll get a MySQL errors at this point because you haven't finished configuring Postgenomic yet. Don't worry about it.
+2) Make the "xml" subdirectory of the interface directory writable by your web server, e.g.
+
+	chmod -R 777 xml/
 
 To configure the code:
 
@@ -72,4 +75,22 @@ This may take a little time.
 
 	./weekly_pipeline.pl
 	
+Voila! Fire up your web browser and go see what's there.
+
+Run ./pipeline.pl once a day.
+Run ./weekly_pipeline.pl once a week.
+
+To add new blogs / categories (sorry, this is a terrible, terrible hack):
+
+1) Open up your Postgenomic in a web browser
+2) Go to the "login.php" page and enter "Euan" in the username box, then press submit
+3) You should now get an "Admin" option on the menubar.
+
+You can change the hardcoded, passwordless admin user by editing the handle_users.php file in the "interface" directory. It works like this because I took out the Nature specific login code. An excellent first task would be to implement a Postgenomic specific login system....
+
+Good luck. Don't hesitate to email me if there are any problems....
+
+Euan
+
+e.adie@nature.com
 
