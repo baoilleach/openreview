@@ -1,0 +1,33 @@
+/* plugin:configmanager */
+#config__manager {margin: 1em;}
+#config__manager div.success,
+#config__manager div.error,
+#config__manager div.info {
+  background-position: 0.5em;
+  padding: 0.5em;
+  text-align:center
+}
+
+#config__manager form { }
+#config__manager table {margin: 1em 0;}
+#config__manager td input.edit {width: 30em;}
+#config__manager td select.edit { }
+#config__manager td textarea.edit {width: 27.5em; height: 4em;}
+
+#config__manager tr.default .input,
+#config__manager tr.default input,
+#config__manager tr.default textarea,
+#config__manager tr.default select {
+  background-color: #ccddff;
+}
+
+#config__manager tr.protected .input,
+#config__manager tr.protected input,
+#config__manager tr.default textarea,
+#config__manager tr.protected select {
+  background-color: #ffcccc;
+}
+
+#config__manager td.error  {background-color: red;}
+
+/* end plugin:configmanager */

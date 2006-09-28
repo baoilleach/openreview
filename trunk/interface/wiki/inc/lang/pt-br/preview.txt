@@ -1,0 +1,8 @@
+====== Pré-visualização ======
+
+Esta é a previsão de como irá ficar o conteúdo da entrada.
+
+**Atenção**: A entrada ainda não está gravada.\\
+É necessário clicar em ''Salvar'' para efetivar as modificações.
+
+----
