@@ -1,0 +1,20 @@
+* 11 / 09 / 06
+
+*.php				: made some interface tweaks to the tabs and tags
+Added new option (use_curl) to use if your server doesn't support get_file_contents getting URLs.
+
+* 04 / 09 / 06
+
+api.php				: added callback var to allow for JSON callbacks, increased max blog and post limits
+
+* 03 / 09 / 06
+
+atom_functions.php	: consolidated functions to make strings XML friendly
+default.conf		: added conf lines for caching API and Atom feeds (default: true)
+default.conf		: render_cache_to line takes either "disk" or "db"
+cache_functions.php	: render_cache_to config line introduced, allows caching to disk or MySQL
+atom.php			: 
+JSON.php			: external library for converting PHP vars to JSON
+api.php				: added 'format' var - allows results to be returned in JSON format
+LICENCE				: Licence for JSON library (and eventually Postgenomic itself)
+CHANGES				: Started this file

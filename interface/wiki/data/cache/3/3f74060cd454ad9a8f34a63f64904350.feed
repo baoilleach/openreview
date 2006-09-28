@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generator="FeedCreator 1.7.1" -->
+<?xml-stylesheet href="http://192.168.1.100/interface/wiki/lib/styles/feed.css" type="text/css"?>
+<rdf:RDF
+    xmlns="http://purl.org/rss/1.0/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel rdf:about="http://192.168.1.100/interface/wiki/feed.php">
+        <title>DokuWiki</title>
+        <description></description>
+        <link>http://192.168.1.100/interface/wiki/</link>
+        <image rdf:resource="http://192.168.1.100/interface/wiki/lib/images/favicon.ico" />
+       <dc:date>2006-08-15T20:27:40+01:00</dc:date>
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://192.168.1.100/interface/wiki/doku.php?id=reviews&amp;amp;rev=1154990768"/>
+                <rdf:li rdf:resource="http://192.168.1.100/interface/wiki/doku.php?id=start&amp;amp;rev=1154988475"/>
+                <rdf:li rdf:resource="http://192.168.1.100/interface/wiki/doku.php?id=stats&amp;amp;rev=1154683812"/>
+                <rdf:li rdf:resource="http://192.168.1.100/interface/wiki/doku.php?id=who_to_contact&amp;amp;rev=1154387185"/>
+            </rdf:Seq>
+        </items>
+    </channel>
+    <image rdf:about="http://192.168.1.100/interface/wiki/lib/images/favicon.ico">
+        <title>DokuWiki</title>
+        <link>http://192.168.1.100/interface/wiki/</link>
+        <url>http://192.168.1.100/interface/wiki/lib/images/favicon.ico</url>
+    </image>
+    <item rdf:about="http://192.168.1.100/interface/wiki/doku.php?id=reviews&amp;amp;rev=1154990768">
+        <dc:format>text/html</dc:format>
+        <dc:date>2006-08-07T23:46:08+01:00</dc:date>
+        <title>reviews</title>
+        <link>http://192.168.1.100/interface/wiki/doku.php?id=reviews&amp;amp;rev=1154990768</link>
+        <description> Reviews on Postgenomic are like mini-reviews of single papers. Imagine that you are making a presentation to a (very large) journal club. Reviews can be positive or negative or anywhere in-between and can be as formal or informal as you like. Review...</description>
+    </item>
+    <item rdf:about="http://192.168.1.100/interface/wiki/doku.php?id=start&amp;amp;rev=1154988475">
+        <dc:format>text/html</dc:format>
+        <dc:date>2006-08-07T23:07:55+01:00</dc:date>
+        <title>start</title>
+        <link>http://192.168.1.100/interface/wiki/doku.php?id=start&amp;amp;rev=1154988475</link>
+        <description> The idea behind the wiki is to   provide easily-updatable help pages  Keep developers up to date with changes to the API  Promote science blogging  Provide a forum for questions / feature requests   Here are some links to other pages on the wiki to ...</description>
+    </item>
+    <item rdf:about="http://192.168.1.100/interface/wiki/doku.php?id=stats&amp;amp;rev=1154683812">
+        <dc:format>text/html</dc:format>
+        <dc:date>2006-08-04T10:30:12+01:00</dc:date>
+        <title>stats</title>
+        <link>http://192.168.1.100/interface/wiki/doku.php?id=stats&amp;amp;rev=1154683812</link>
+        <description> Blogs are ranked on the number of incoming links from other science blogs (in posts; not as part of the blogroll).   Journals   Journals are ranked on the number of posts from science blogs that link to one or more of their papers - not on the numbe...</description>
+    </item>
+    <item rdf:about="http://192.168.1.100/interface/wiki/doku.php?id=who_to_contact&amp;amp;rev=1154387185">
+        <dc:format>text/html</dc:format>
+        <dc:date>2006-08-01T00:06:25+01:00</dc:date>
+        <title>who_to_contact</title>
+        <link>http://192.168.1.100/interface/wiki/doku.php?id=who_to_contact&amp;amp;rev=1154387185</link>
+        <description> Problems, questions, feature suggestions should go to e.adie (at) nature.com    ...</description>
+    </item>
+</rdf:RDF>

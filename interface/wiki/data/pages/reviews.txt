@@ -1,0 +1,28 @@
+====== Reviews ======
+
+===== What =====
+
+Reviews on Postgenomic are like mini-reviews of single papers. Imagine that you are making a presentation to a (very large) journal club. Reviews can be positive or negative or anywhere in-between and can be as formal or informal as you like. Reviews typically carry a rating.
+
+Reviews can be created by bloggers and registered users. They are lightly curated by NPG to ensure that they meet some minimum standards for inclusion:
+
+  * They should cover one paper in detail
+  * They should be at least ~100 words long, not including any text quoted from the paper
+  * No defamatory or grossly offensive material, please
+
+===== Why =====
+
+What are the benefits?
+
+Reviews are:
+
+  * given a DOI so that they can be cited easily
+  * version controlled (we'll have a backed-up digital record of them for as long as you want us to)
+  * added as a LinkOut to the relevant paper in PubMed 
+  * A great way to share specialized knowledge with a wider scientific audience
+
+===== How =====
+
+Any registered user can add a review to a paper.
+
+Or you can use semantic markup in your blog posts.
