@@ -1,0 +1,75 @@
+Installing Postgenomic
+======================
+
+To obtain the Postgenomic code:
+
+1) Download and install subversion if you haven't already got it
+2) Create a directory for your Postgenomic installation
+3) Enter that directory
+4) run
+
+	svn checkout http://openreview.googlecode.com/svn/trunk/ openreview
+	
+this will download the latest version of the code.
+
+To initialize the database:
+
+1) Connect to your MySQL server as a user that has permission to create databases
+2) Type
+	
+	CREATE DATABASE pg_posts
+
+(you can replace 'pg_posts' with any name you like)
+3) Create a user with read / write privileges on the database you just created:
+
+	GRANT ALL ON pg_posts.* TO 'user'@'%' IDENTIFIED BY 'password'
+
+(remember to replace user and password with something more appropriate)
+3) Exit 
+4) Go to the "conf" subdirectory
+5) Type
+
+	mysql -u <user> --password=<password> pg_posts < pg_posts.schema
+
+Let your webserver know where to serve documents from:
+
+1) You need to make the interface subdirectory available through your web server - perhaps with a symbolic link?
+
+To configure the code:
+
+1) Go to the "conf" subdirectory
+2) edit the default.conf file. 
+3) Go through the options one by one and change them if necessary. Things you will definitely need to change include db_user (the name of the user you created in the step above) and db_password (their password). 
+
+If do_search=1 then Postgenomic will attempt to index posts, blogs and papers with PyLucene. If you don't have PyLucene installed (and don't want to install it) set this value to 0, but note that search functionality on the site won't work (for now).
+
+To integrate Connotea you need to have an account there so that you can access the API.
+
+base_url should be the address of your Postgenomic installation - for example, if it's installed locally in the "postgenomic" subdirectory your base_url would be "http://localhost/postgenomic/". Remember the trailing slash.
+
+path_to_pipeline should be the complete path to the "openreview" directory created by the svn command. path_to_interface should be the complete path to the "interface" subdirectory.
+
+feeds should point to the OPML file in the "conf" subdirectory (or a custom OPML file listing blogs to add to the database, if you prefer).
+
+To bootstrap the database:
+
+1) Go to the root pipeline directory (the one created by svn)
+2) Type
+
+	utils/sync_opml.pl
+	
+This will seed the database with a bunch of science blogs.
+
+Running Postgenomic for the first time:
+
+1) Type
+
+	./pipeline.pl
+	
+This may take a little time.
+
+2) Type
+
+	./weekly_pipeline.pl
+	
+
