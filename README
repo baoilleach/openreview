@@ -80,13 +80,14 @@ Voila! Fire up your web browser and go see what's there.
 Run ./pipeline.pl once a day.
 Run ./weekly_pipeline.pl once a week.
 
-To add new blogs / categories (sorry, this is a terrible, terrible hack):
+To add new blogs / categories:
 
-1) Open up your Postgenomic in a web browser
-2) Go to the "login.php" page and enter "Euan" in the username box, then press submit
-3) You should now get an "Admin" option on the menubar.
-
-You can change the hardcoded, passwordless admin user by editing the handle_users.php file in the "interface" directory. It works like this because I took out the Nature specific login code. An excellent first task would be to implement a Postgenomic specific login system....
+1) Go into the database with a MySQL client
+2) Insert a name / password pair into the "users" table
+3) Remember the user_id
+4) Insert a role of "is_admin" into the "roles" table, with a user_id of (whatever the user_id above is)
+5) Go to http://your.server/login.php and log in with the name / password pair from above
+6) You should now see an "Admin" tab in the menubar.
 
 Good luck. Don't hesitate to email me if there are any problems....
 
