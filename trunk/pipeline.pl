@@ -14,8 +14,15 @@ system("perl update_posts.pl"); # put new posts into the database
 system("perl update_feeds.pl"); # update feed names, descriptions etc.
 system("perl get_links.pl"); # get all URLs from posts
 system("perl clean_links.pl"); # clean up URLs
-system("perl name_links.pl"); # clean up URLs
-system("perl parse_links.pl"); # follow links to see if they lead to papers
+
+if ($config{"collect_links"}) {
+	system("perl name_links.pl"); # get titles for links
+}
+
+if ($config{"collect_papers"}) {
+	system("perl parse_links.pl"); # follow links to see if they lead to papers
+}
+
 system("perl get_connotea_cache.pl"); # get cache of recent items from Connotea
 system("perl get_connotea_tags.pl"); # match tags and comments to items in our database
 system("perl generate_summaries.pl"); # generate summary tables to speed up front-end
