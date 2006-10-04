@@ -1,5 +1,43 @@
 <?
 
+function clean_terms($terms) {
+	# if we've got a cached version of the results from this function use it...
+	$id = md5(implode(',', $terms));
+	
+	$cached = get_cache($id);
+	
+	if ($cached) {return unserialize($cached);}
+		
+	# go through the terms in sequence to see what the counts with non-duplicated posts are...
+	$posts_seen = array();
+	foreach ($terms as $term => $freq) {
+		$term = mysql_escape_string($term);
+		
+		$query = "SELECT DISTINCT post_id FROM terms WHERE term='$term'";
+		$results = mysql_query($query);
+		
+		while ($row = mysql_fetch_assoc($results)) {
+			$post_id = $row['post_id'];
+			
+			if ($posts_seen[$post_id]) {
+				$terms[$term]--;
+				if ($terms[$term] <= 0) {unset($terms[$term]);}
+			}
+			
+			$posts_seen[$post_id] = true;
+		}
+	}
+	
+	arsort($terms);
+	
+	# cache results
+	$cached = serialize($terms);
+	cache($id, $cached);
+	
+	return $terms;
+}
+
+
 function get_terms($limit = 50, $category = false) {
 	$query = "SELECT terms.term, bursts.score AS count FROM terms, bursts WHERE bursts.term = terms.term GROUP BY term ORDER BY count DESC LIMIT $limit";
 	if ($category) {
@@ -9,7 +47,6 @@ function get_terms($limit = 50, $category = false) {
 	}
 	$results = mysql_query($query);
 	$terms = array();
-	
 	while ($row = mysql_fetch_array($results)) {
 		$terms[$row['term']] = $row['count'];
 	}

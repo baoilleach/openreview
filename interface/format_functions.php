@@ -358,7 +358,7 @@ function print_tagcloud($tags) {
 	print "</div>";
 }
 
-function print_termcloud($tags) {
+function print_termcloud($tags, $prefs = array()) {
 	# tags must be an assoc array, where the key is the tag and the value is the number of occurrences
 	# get the highest count and the lowest, then create a fixed number of bins
 	$bins = 4;
@@ -377,7 +377,9 @@ function print_termcloud($tags) {
 	foreach ($tags as $key => $value) {
 		$bin = floor($value / $binsize);
 		if ($bin > $bins) {$bin = $bins;} 
-		print "<a class='tagcloud_$bin' href='".linkto("posts.php", $GLOBALS['page_vars'], array("term" => $key, "order_by" => "cited", "category" => "false"))."'>$key</a> ";
+		$target = "";
+		if ($prefs['target']) {$target = "target='".$prefs['target']."'";}
+		print "<a class='tagcloud_$bin' $target href='".linkto("posts.php", $GLOBALS['page_vars'], array("term" => $key, "order_by" => "cited", "category" => "false"))."'>$key</a> ";
 	}
 	print "</div>";
 }
@@ -726,36 +728,40 @@ function print_post($post, $filters = array()) {
 	if ( ($post['blog_image']) && ($filters['image']) ) {
 		print "<div class='postbox_thumbnail'><img src='".$post['blog_image']."'/></div>";
 	}
-	print "<div class='postbox_byline'>";
 	
-	print connotea_link($post['url']);
-		
-	print "<a href='".linkto("blog_search.php", $GLOBALS['page_vars'], array("blog_id" => $post['blog_id']))."'>".$post['blog_name']."</a> on <span class='date'>".date("D jS M y", strtotime($post['pubdate']))."</span>";
-	
-	if ($filters['display_geotags']) {
-		$geotags = get_geotags_for_post($post['post_id']);
-		if ($geotags) {
-			for ($i=0; $i < sizeof($geotags); $i += 3) {
-				$lat = $geotags[$i];
-				$lng = $geotags[($i + 1)];
-				$term = $geotags[($i + 2)];
+	if (!$filters['short']) {
+		print "<div class='postbox_byline'>";
 
-				print "<a href='http://maps.google.com/maps?f=q&hl=en&q=&ie=UTF8&ll=$lat,$lng&om=1&spn=1.793919,3.955078'><img align='absmiddle' hspace='5' src='images/world_link.png' border='0'/> $term</a>";				
+		print connotea_link($post['url']);
+
+		print "<a href='".linkto("blog_search.php", $GLOBALS['page_vars'], array("blog_id" => $post['blog_id']))."'>".$post['blog_name']."</a> on <span class='date'>".date("D jS M y", strtotime($post['pubdate']))."</span>";
+
+		if ($filters['display_geotags']) {
+			$geotags = get_geotags_for_post($post['post_id']);
+			if ($geotags) {
+				for ($i=0; $i < sizeof($geotags); $i += 3) {
+					$lat = $geotags[$i];
+					$lng = $geotags[($i + 1)];
+					$term = $geotags[($i + 2)];
+
+					print "<a href='http://maps.google.com/maps?f=q&hl=en&q=&ie=UTF8&ll=$lat,$lng&om=1&spn=1.793919,3.955078'><img align='absmiddle' hspace='5' src='images/world_link.png' border='0'/> $term</a>";				
+				}
 			}
 		}
-	}
+
+		print "</div>";
 	
-	print "</div>";
-	print "<div class='postbox_content'>";
+		print "<div class='postbox_content'>";
 	
-	if ($filters['fulltext']) {
-		$flatfile = $GLOBALS['config']['path_to_pipeline'].$post['filename'];
-		$xml = process_post_xml($flatfile);
-		print $xml['description'];
-	} else {
-		print $post['summary']."...";
+		if ($filters['fulltext']) {
+			$flatfile = $GLOBALS['config']['path_to_pipeline'].$post['filename'];
+			$xml = process_post_xml($flatfile);
+			print $xml['description'];
+		} else {
+			print $post['summary']."...";
+		}
+		print "</div>";
 	}
-	print "</div>";
 	print "<div class='postbox_footer'>&nbsp;</div>";
 	print "</div>";
 	if ($post['type'] == "review") {print "</div>";}

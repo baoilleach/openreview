@@ -40,7 +40,8 @@
 	#print "<h3>Tags</h3>";
 	#print_tagcloud($random_tags);
 	print "<h3>Top Terms Today</h3>";
-	$terms = get_terms(20, $safe_category);
+	$terms = get_terms(32, $safe_category);
+	$terms = clean_terms($terms);
 	print_termcloud($terms);
 	print "</div>";
 	

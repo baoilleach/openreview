@@ -11,9 +11,34 @@
 	include_once("xml_functions.php");
 	include_once("cache_functions.php");
 	include_once("search_functions.php");
+	include_once("login_functions.php");
 	include_once("handle_vars.php");
 	include_once("handle_users.php");	
 
+
+
+
+# we could be collecting images from posts involved in term bursts with the get_bursts_images.pl script...
+# still working on this.
+function get_images_from($post_ids) {
+	if (!$post_ids) {return array();}
+	if ($post_ids[0]["post_id"]) {
+		# we've been passed an array of post objects, not post_ids. Convert them.
+		$real_post_ids = array();
+		foreach ($post_ids as $post) {
+			array_push($real_post_ids, $post['post_id']);
+		}
+		$post_ids = $real_post_ids;
+	}
+	
+	$images = array();
+			
+	$query = "SELECT src FROM bursts_images WHERE post_id IN ('".implode("','", $post_ids)."')";
+	$results = mysql_query($query);	
+	while ($row = mysql_fetch_assoc($results)) {array_push($images, $row['src']);}
+	
+	return $images;
+}
 
 function download_url($url, $username = false, $password = false) {
 	global $config;
