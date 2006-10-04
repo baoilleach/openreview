@@ -5,8 +5,18 @@
 	$is_admin = false;
 	
 	if ($_COOKIE['pg_logged_on']) {
-		$logged_on = mysql_escape_string($_COOKIE['pg_logged_on']);
-		if ($logged_on == "Euan") {$is_admin = true;} # yes, it's a horrible hack.
+		$validator = validate_cookie($_COOKIE['pg_logged_on']);
+		$logged_on = $validator["username"];
+		
+		$roles = $validator["roles"];
+		
+		if (in_array("is_admin", $roles)) {$is_admin = true;}
+		
+		if (!$logged_on) {
+			# bad cookie - get rid of it.
+			setcookie("pg_logged_on");
+			$logged_on = false;
+		}
 	}
 	if ($_GET['logout']) {
 		setcookie("pg_logged_on");

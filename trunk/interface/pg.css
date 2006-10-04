@@ -143,6 +143,36 @@ p {padding: 4px;}
 	height: 64px;
 }
 
+/* NEWS PAGE STUFF */
+.newspage_stories {
+	width: 66%;
+	float: left;
+}
+.newspage_tabs {
+	padding: 0px;
+}
+.newspage_tab_container {
+	width: 50%;
+	float: left;
+}
+.newspage_tab {
+	padding: 10px;	
+	padding-top: 0px;
+	margin: 0px;
+}
+.newspage_footer {
+	clear: both;
+	height: 1px;
+	width: 1px;
+	line-height:  1px;	
+	padding: 0px;
+	margin: 0px;
+}
+.newspage_sidebar {
+
+}
+
+
 /* FRONTPAGE STUFF */
 .frontpage_tabs {
 	padding: 0px;
@@ -515,6 +545,7 @@ p {padding: 4px;}
 	padding-top:  5px;
 	font-size: 0.8em;
 	text-align: center;
+	clear: both;
 }
 
 /* HEADER */
@@ -590,4 +621,9 @@ p {padding: 4px;}
 .title_login {
 	margin-right: 10px;
 	float: right;
+}
+.errorbox {
+	border:  2px solid #FF3300;
+	background-color: #FFCCBF;
+	padding: 10px;
 }

@@ -12,5 +12,6 @@
 <h1>Admin Tasks</h1>
 <h3>Blogs</h3>
 <p><a href='<? plinkto("manage_blogs.php", $page_vars); ?>'>Manage Blogs</a>
+<p><a href='<? plinkto("manage_users.php", $page_vars); ?>'>Manage Users</a>
 </div>
 <? include("footer.php"); ?>

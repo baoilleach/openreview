@@ -10,19 +10,9 @@ urchinTracker();
 </script>
 <?
 	}
-	
-	if ($config['use_crazyegg']) {
-?>
-<script type="text/javascript">
-//<![CDATA[
-  document.write('<scr'+'ipt src="http://crazyegg.com/pages/scripts/8322.js?'+(new Date()).getTime()+'" type="text/javascript"></scr'+'ipt>');
-//]]>
-</script>
-<?
-	}
 ?>
 <div class='footer'>
-(c) 2006 Nature Publishing Group. Copyright for blog posts and author images rests with the authors.
+<? print $config['copyright_notice']; ?>
 </div>
 </body>
 </html>

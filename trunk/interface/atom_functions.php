@@ -33,7 +33,8 @@ function link_atom_entry($link) {
 		$summary .= "<p> <a href='".$bits[1]."'>".$bits[0]."</a> from <a href='".slinkto("blog_search.php", $page_vars, array("blog_id" => $bits[5]))."'>".$bits[3]."</a>";
 	}
 	
-	$summary = make_var_atom_safe($summary);
+	# don't strip html tags...
+	$summary = reduce_to_ascii(htmlentities($summary));
 	
 	$return .= 
 "
@@ -42,7 +43,7 @@ function link_atom_entry($link) {
 	<link rel='alternate' href=\"".$link['url']."\"/>
 	<id>".slinkto("link.php", array(), array("url_hash" => md5($link['url'])))."</id>
 	<updated>".$link['last_linked_on']."</updated>
-	<summary><![CDATA[$summary]]></summary>
+	<content type='html'>$summary</content>
 	<gd:rating value='".$link['linked_by']."' min='0' max='100'/>
 </entry>
 ";
