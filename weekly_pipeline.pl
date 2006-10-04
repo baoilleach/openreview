@@ -6,10 +6,17 @@
 use lib (".");
 use config qw(%config);
 
-system("perl get_comments.pl"); # get comments from various sources
-system("perl parse_comments.pl"); # match them to papers in the db (and create the paper if it doesn't already exist)
+if ($config{"collect_comments"}) {
+	system("perl get_comments.pl"); # get comments from various sources
+	system("perl parse_comments.pl"); # match them to papers in the db (and create the paper if it doesn't already exist)
+}
+
 system("perl utils/get_technorati_portrait.pl"); # get technorati portraits for bloggers
-system("perl find_f1000_reviews.pl"); # find any F1000 reviews assigned to papers in the db
+
+if ($config{"collect_comments"}) {
+	system("perl find_f1000_reviews.pl"); # find any F1000 reviews assigned to papers in the db
+}
+
 system("perl generate_summaries.pl"); # update summary tables.
 system("perl generate_stats.pl"); # generate stats.
 system("perl generate_xml.pl"); # generate flatfiles of new papers.
