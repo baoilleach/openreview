@@ -5,7 +5,7 @@
 	# $PAGE_TITLE (to set the page title)
 	# $PAGE_TYPE (to set relevant RSS feeds and Javascript includes)
 	
-	if (!$PAGE_TITLE) {$PAGE_TITLE = "Postgenomic";}
+	if (!$PAGE_TITLE) {$PAGE_TITLE = $config['name'];}
 	if ($safe_category) {
 		$PAGE_TITLE .= " - ".$safe_category;
 	}
@@ -28,11 +28,12 @@
 	<script type="text/javascript" src="javascripts/lightbox.js"></script>
 	<script type="text/javascript" src="javascripts/postgenomic.js"></script>
 	
+	<!-- the Postgenomic blog is postgenomic.com specific, really... -->
 	<link rel='alternate' type='application/atom+xml' title='Postgenomic blog' href='http://www.postgenomic.org/blog/atom.xml'/>
 <?	
 	feedbox("Latest posts, all categories", "atom.php?type=latest_posts", true);
-	feedbox("Latest papers, all categories", "atom.php?type=latest_papers", true); 
-	feedbox("Latest links (min 2 blogs), all categories", "atom.php?type=latest_links&min_links=2", true);		
+	if ($config['collect_papers']) {feedbox("Latest papers, all categories", "atom.php?type=latest_papers", true);}
+	if ($config['collect_links']) {feedbox("Latest links (min 2 blogs), all categories", "atom.php?type=latest_links&min_links=2", true);}	
 ?>
 
 </head>
