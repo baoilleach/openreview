@@ -40,14 +40,14 @@ function get_images_from($post_ids) {
 	return $images;
 }
 
-function download_url($url, $username = false, $password = false) {
+function download_url($url, $username = false, $password = false, $timeout = false) {
 	global $config;
 	
 	$results = false;
 	$use_curl = $config['use_curl'];
 	
 	if (($username) && ($password)) {
-		$url = preg_replace("/http:\/\//i", "http://".$username.":".$password."@", $url);
+		# $url = preg_replace("/http:\/\//i", "http://".$username.":".$password."@", $url);
 		$use_curl = true;
 	}
 	
@@ -56,6 +56,12 @@ function download_url($url, $username = false, $password = false) {
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		if ($username) {
+			curl_setopt($ch, CURLOPT_USERPWD, "$username:$password"); 
+		}
+		if ($timeout) {
+			curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);	
+		}
 		curl_setopt($ch, CURLOPT_USERAGENT, "Postgenomic WWW::Connotea");
 		$results = curl_exec($ch);
 		curl_close($ch);

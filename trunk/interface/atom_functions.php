@@ -19,6 +19,24 @@ function make_var_atom_safe($var, $force_reduce = false) {
 	return $clean;
 }
 
+function term_atom_entry($term, $details) {
+	global $config;
+
+	$link = $config['base_url'].linkto("posts.php", array(), array("term" => $term));
+	$posts = implode(",", $details["posts"]);
+	
+	$return .= 
+"
+<entry>
+	<title>$term</title>
+	<link>$link</link>
+	<content>$posts</content>
+</entry>
+";
+	
+	return $return;
+}
+
 function link_atom_entry($link) {
 	global $config;
 	

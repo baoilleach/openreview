@@ -1,5 +1,33 @@
 <?
 
+# get terms from some content using the Yahoo Term Extraction API
+function extract_terms($text) {
+	# use the Yahoo! Term Extraction API for the moment
+	
+	$url = "http://api.search.yahoo.com/ContentAnalysisService/V1/termExtraction";
+	$appid = "xnn";
+	$context = strip_tags($text);
+	$output = "php";
+	
+	# use CURL so that we can make a POST request instead of a GET
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, sprintf("appid=%s&context=%s&output=%s", $appid, $context, $output));	
+		
+	$results = curl_exec($ch);
+	
+	curl_close($ch);
+	
+	$array = unserialize($results);
+
+	#print_r($array);
+	
+	return $array["ResultSet"]["Result"];
+}
+
 function clean_terms($terms) {
 	# if we've got a cached version of the results from this function use it...
 	$id = md5(implode(',', $terms));
@@ -224,6 +252,19 @@ function get_papers_with_tag($tag, $include_posts = true) {
 	return $papers;
 }
 
+function get_posts_with_term($term) {
+	$query = "SELECT DISTINCT post_id FROM terms WHERE term='$term'";
+	$results = mysql_query($query);
+	
+	$posts = array();
+	
+	while ($row = mysql_fetch_array($results)) {
+		array_push($posts, $row['post_id']);
+	}
+	
+	return $posts;
+}
+
 function get_stories_with_tag($tag, $include_posts = true) {
 	$query = "SELECT DISTINCT story_id FROM tags WHERE tag = '$tag' AND !ISNULL(story_id)";
 	$results = mysql_query($query);
@@ -247,6 +288,20 @@ function get_stories_with_tag($tag, $include_posts = true) {
 	}
 
 	return $stories;	
+}
+
+function validate_terms($terms) {
+	# given an array of terms, return the ones that are in Postgenomic
+	$return = array();
+	
+	$query = "SELECT DISTINCT term, COUNT(*) AS count FROM terms WHERE term IN ('".implode("','", $terms)."') GROUP BY term";
+	$results = mysql_query($query);
+
+	while ($row = mysql_fetch_assoc($results)) {
+		$return[$row['term']] = $row['count'];
+	}
+	
+	return $return;
 }
 
 function validate_tags($tags) {

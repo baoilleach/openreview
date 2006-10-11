@@ -93,19 +93,6 @@ function img_to_lightbox($matches) {
 	return lightbox($matches[2]);
 }
 
-function get_posts_with_term($term) {
-	$query = "SELECT DISTINCT post_id FROM terms WHERE term='$term'";
-	$results = mysql_query($query);
-	
-	$posts = array();
-	
-	while ($row = mysql_fetch_array($results)) {
-		array_push($posts, $row['post_id']);
-	}
-	
-	return $posts;
-}
-
 function get_posts_with_conference() {
 	$query = "SELECT DISTINCT post_id FROM links WHERE type='conference'";
 	$results = mysql_query($query);
@@ -130,7 +117,7 @@ function get_posts_with_conference() {
 function get_posts_with_research() {
 	$posts = array();
 	
-	$query = "SELECT DISTINCT post_id FROM tags WHERE tag='original_research'";
+	$query = "SELECT DISTINCT post_id FROM tags WHERE (tag='original_research' OR tag='original research')";
 	$results = mysql_query($query);
 		
 	while ($row = mysql_fetch_array($results)) {
@@ -174,6 +161,18 @@ function get_posts($sort_by = "published_on", $filters = array()) {
 	if ($sort_by == "published_on") {$order_by = " ORDER BY pubdate DESC";}
 	if ($sort_by == "added_on") {$order_by = " ORDER BY added_on DESC";}
 	if ($sort_by == "cited") {$order_by = " ORDER BY linked_by DESC, pubdate DESC";}
+	if ($sort_by == "post_freq") {
+		if ($filters['post_id']) {
+			# we want an order in which elements that appear most frequently in $filters['post_id'] have the highest rankings
+			$post_freq = array_count_values($filters['post_id']);
+			arsort($post_freq);			
+			$order_by = " ORDER BY FIELD(post_id";
+			foreach ($post_freq as $post_id => $post_freq) {
+				$order_by .= ", $post_id";
+			}
+			$order_by .= ")";
+		}
+	}
 	$sort_by .= ", title ASC";
 
 	if (!$filters['limit']) {$filters['limit'] = $GLOBALS["config"]['posts_per_page'];}
@@ -201,9 +200,16 @@ function get_posts($sort_by = "published_on", $filters = array()) {
 		$where_clause .= " AND blog_id IN ($blogs)";
 	}
 	if ($filters['tag']) {
-		$tposts = get_posts_with_tag($filters['tag']);
+		$tag = $filters['tag'];
+		$tposts = array();
+		if ($tag == "original_research") {$tposts = get_posts_with_research();}
+		elseif ($tag == "conference") {$tposts = get_posts_with_conference();}
+		elseif ($tag == "review") {$tposts = get_posts_with_review();}
+		else {$tposts = get_posts_with_tag($filters['tag']);}
+		
 		$tposts= "'".implode("','", $tposts)."'";
 		$where_clause .= " AND post_id IN ($tposts)";
+		
 	}
 	if ($filters['review']) {
 		$tposts = get_posts_with_review();

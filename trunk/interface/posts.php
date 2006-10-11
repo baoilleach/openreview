@@ -7,6 +7,7 @@
 <? include("header.php"); ?>
 <? include("posts_menu.php"); ?>
 <?
+	$output_available = 1;
 	$filters = array();
 	$safe_timeframe = mysql_escape_string($_GET['timeframe']);
 	$safe_min_links = mysql_escape_string($_GET['min_links']);
@@ -14,7 +15,7 @@
 	
 	if (!$safe_tag) {$safe_tag = false;}
 	if (!$safe_order_by) {$safe_order_by = "published_on";}
-	if (!in_array($safe_order_by, array("added_on", "cited", "published_on"))) {$safe_order_by = "added_on";}
+	if (!in_array($safe_order_by, array("post_freq", "added_on", "cited", "published_on"))) {$safe_order_by = "added_on";}
 
 	if (!in_array($safe_timeframe, array("3m", "1w", "1m", "1y", "10y"))) {
 		$safe_timeframe = "10y";
@@ -57,11 +58,32 @@
 	} else {
 		$filters['tag'] = $safe_tag;
 	}
-	$filters['term'] = $safe_term;
 	
 	$page_vars['tag'] = $safe_tag;
+	
+	
+	# terms are now handled by the code below...
+	#$filters['term'] = $safe_term;
+	
 	$page_vars['term'] = $safe_term;
-
+	if ($safe_term) {
+		$pterms = explode(",", $safe_term);
+		$tposts = array();
+					
+		if (sizeof($pterms)) {
+			foreach ($pterms as $pterm) {
+				$tposts = array_merge($tposts, get_posts_with_term($pterm));
+			}
+		}
+		
+		if (sizeof($tposts) >= 1) {
+			$filters['post_id'] = $tposts;
+		} else {
+			$filters['post_id'] = array();
+			$output_available = 0;
+		}
+	}
+	
 	if ($safe_journal) {$page_vars["journal"] = $safe_journal;}
 	if ($safe_min_links) {$page_vars['min_links'] = $safe_min_links;}
 	if ($safe_timeframe) {$page_vars['timeframe'] = $safe_timeframe;}
@@ -101,7 +123,9 @@
 </div>
 <div class='content'>
 <?	
-	$posts = get_posts($safe_order_by, $filters);
+	if ($output_available) {
+		$posts = get_posts($safe_order_by, $filters);
+	}
 	
 	# pagination control
 	if ($posts) {
