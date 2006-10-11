@@ -104,11 +104,11 @@
 	}
 
 	print_menu_item("index.php", "Home", "index");
-	print_menu_item("papers.php", "Papers", "papers");
-	print_menu_item("links.php", "Links", "links");
+	if ($config['collect_papers']) {print_menu_item("papers.php", "Papers", "papers");}
+	if ($config['collect_links']) {print_menu_item("links.php", "Links", "links");}
 	print_menu_item("posts.php", "Posts", "posts");
 	print_menu_item("blogs.php", "Blogs", "blogs");
-	print_menu_item("search.php", "Search", "search");
+	if ($config['do_search']) {print_menu_item("search.php", "Search", "search");}
 	print_menu_item("stats.php", "Zeitgeist", "zeitgeist");
 	print_menu_item("wiki/doku.php", "Wiki", "wiki");
 	
