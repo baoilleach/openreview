@@ -17,8 +17,8 @@ use Digest::MD5 qw(md5_hex);
 my $connection_string = sprintf("dbi:mysql:%s:%s", $config{"connotea_db_name"}, $config{"connotea_db_host"});
 my $db = DBI->connect($connection_string, $config{"db_user"}, $config{"db_password"}) or log_error("Couldn't connect to the database.\n");
 
-my $max_results = 10000; # don't get more than 10000 results from Connotea.
-my $max_days = 21; # don't go more than 21 days back.
+my $max_results = 5000; # don't get more than 5000 results from Connotea.
+my $max_days = 14; # don't go more than 14 days back.
 
 # find our "stop" point. This might break if a user can post the same URI more than once - better check that.
 # (update: users can't)
