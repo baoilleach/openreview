@@ -24,6 +24,16 @@ term varchar(255) primary key,
 score float
 );
 
+create table bursts_images (
+image_id bigint auto_increment primary key,
+post_id bigint,
+src text,
+image longblob,
+height int,
+width int,
+alt text
+) engine=innodb;
+
 create table blogs (
 blog_id	bigint primary key auto_increment,
 title text,
@@ -189,6 +199,15 @@ user_id bigint,
 role varchar(255)
 );
 create index user_id_idx ON roles (user_id);
+insert into roles (user_id, role) VALUES (1, 'is_admin');
+
+create table trackbacks (
+requested_by bigint,
+validated int default 0,
+domain text,
+path_regexp text,
+last_checked timestamp default 0
+);
 
 create table comments (
 id_comment_hash varchar(33) primary key,
@@ -220,6 +239,7 @@ lng float,
 lat float
 );
 create index post_id_idx ON terms (post_id);
+create index term_idx ON terms (term);
 
 drop table if exists render_cache;
 create table render_cache (
