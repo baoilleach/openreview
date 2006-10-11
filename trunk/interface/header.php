@@ -111,7 +111,7 @@
 	print_menu_item("blogs.php", "Blogs", "blogs");
 	if ($config['do_search']) {print_menu_item("search.php", "Search", "search");}
 	print_menu_item("stats.php", "Zeitgeist", "zeitgeist");
-	print_menu_item("wiki/doku.php", "Wiki", "wiki");
+	if ($config['do_wiki']) {print_menu_item("wiki/doku.php", "Wiki", "wiki");}
 	
 	if ($logged_on && $is_admin) {
 ?>
