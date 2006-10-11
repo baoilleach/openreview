@@ -80,7 +80,7 @@
 	</div>
 	
 <div class='title_logo'>
-<a href='<? plinkto("index.php"); ?>'>pg</a> <span class='title_subheading'><? print strtolower($safe_category); ?></span>
+<a href='<? plinkto("index.php"); ?>'><? print $config['header_name']; ?></a> <span class='title_subheading'><? print strtolower($safe_category); ?></span>
 </div>
 </div>
 <div class='title_menu'>
