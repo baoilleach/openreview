@@ -14,6 +14,10 @@ use config qw(%config log log_error urldecode $DEBUG parse_post_xml url_breakdow
 use helper qw(download_url);
 use Digest::MD5 qw(md5_hex);
 
+if (!$config{"connotea_username"}) {
+	log("script complete: no Connotea username and password supplied.");
+}
+
 my $connection_string = sprintf("dbi:mysql:%s:%s", $config{"connotea_db_name"}, $config{"connotea_db_host"});
 my $db = DBI->connect($connection_string, $config{"db_user"}, $config{"db_password"}) or log_error("Couldn't connect to the database.\n");
 
