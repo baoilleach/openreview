@@ -37,6 +37,7 @@ $base_url = urldecode(strtolower(mysql_escape_string($_GET['base_url'])));
 $post_id = strtolower(mysql_escape_string($_GET['post_id']));
 $citing_url = urldecode(strtolower(mysql_escape_string($_GET['citing_url'])));
 $citing_paper = urldecode(strtolower(mysql_escape_string($_GET['citing_paper'])));
+$term = urldecode(strtolower(mysql_escape_string($_GET['term'])));
 
 $blogs_return_limit = 100;
 $max_blogs_return_limit = 1000;
@@ -52,7 +53,7 @@ if ($PAGE_CACHE) {
 	ob_start();
 }
 
-if ($type == "paper") {
+if (($type == "paper") || ($type == "papers")) {
 	# list papers
 	
 	# the ids_only part of the API is a bit hacky because it needs to be backwards compatible
@@ -107,7 +108,7 @@ if ($type == "paper") {
 	}
 }
 
-if ($type == "blog") {
+if (($type == "blog") || ($type == "blogs")) {
 	# list blogs
 	#	start: skip this many in results
 	#	limit: override default limit
@@ -159,10 +160,61 @@ if ($type == "blog") {
 
 }
 
+$terms_return_limit = 100;
 $posts_return_limit = 100;
 $max_posts_return_limit = 1000;
 
-if ($type == "post") {
+if (($type == "term") || ($type == "terms")) {
+	# get top terms for category $safe_category
+	#   filter by category
+	#   limit number of terms returned
+	#	start at term x
+	# NOTE ALSO:
+	# you can get the posts containing a specific term by calling type=posts&term=<term>
+	
+	$terms_limit = $terms_return_limit;
+	if (($limit) && ($limit <= $terms_return_limit)) {
+		$terms_limit = $limit;
+	}
+		
+	if ($start) {
+		$terms = get_terms(1000000, $safe_category);
+		$terms = array_slice($terms, $start, $terms_limit);
+	} else {
+		$terms = get_terms($terms_limit, $safe_category);
+	}
+	
+	# get posts for each term.
+	$aterms = array();
+	foreach ($terms as $term => $weight) {
+		$aterm = array();
+		$aterm["weight"] = $weight;
+		$aterm["posts"] = get_posts_with_term($term);
+		$aterms[$term] = $aterm;
+	}
+	
+	if ($format == "json") {
+		$json = new Services_JSON();
+		if ($aterms) {
+			$buffer .= $json->encode($aterms);
+		}
+		print $buffer;
+	} else {
+		# return in atom format
+		$buffer .= atom_header();
+		if ($terms) {
+			foreach ($aterms as $term => $details) {
+				$buffer.= term_atom_entry($term, $details);
+			}
+		}
+		$buffer .= atom_footer();
+		print $buffer;
+	}
+	
+}
+
+
+if (($type == "post") || ($type == "posts")) {
 	# list posts (sparse)
 	#	filter by timeframe
 	#	filter by popularity
@@ -172,9 +224,12 @@ if ($type == "post") {
 	#	limit : override default limit (can't be above 100)
 	#	post_id : list of posts you want details of
 	#	category : category you want posts from
+	#	term : posts containing term x
 
 	# any filters?
 	$filters = array();
+	
+	$output_available = 1;
 	
 	# basics...
 	$filters['limit'] = $posts_return_limit;
@@ -190,6 +245,7 @@ if ($type == "post") {
 			$filters['post_id'] = $citing_posts;
 		} else {
 			$filters['post_id'] = array();
+			$output_available = 0;
 		}
 	}
 	
@@ -200,6 +256,7 @@ if ($type == "post") {
 			$filters['post_id'] = $citing_posts;			
 		} else {
 			$filters['post_id'] = array();
+			$output_available = 0;
 		}
 	}
 	
@@ -210,6 +267,33 @@ if ($type == "post") {
 			$filters['post_id'] = $post_id;
 		} else {
 			$filters['post_id'] = array();
+			$output_available = 0;
+		}
+	}
+	
+	# ordering?
+	$safe_order_by = "published_on";
+	if ($order_by == "cited") {$safe_order_by = "cited";}
+	if ($order_by == "published_on") {$safe_order_by = "published_on";}
+	if ($order_by == "added_on") {$safe_order_by = "added_on";}
+	if ($order_by == "post_freq") {$safe_order_by = "post_freq";}	
+	
+	# posts containing a specific term (or terms)?
+	if ($term) {
+		$pterms = explode(",", $term);
+		$tposts = array();
+		
+		if (sizeof($pterms)) {
+			foreach ($pterms as $pterm) {
+				$tposts = array_merge($tposts, get_posts_with_term($pterm));
+			}
+		}
+		
+		if (sizeof($tposts) >= 1) {
+			$filters['post_id'] = $tposts;
+		} else {
+			$filters['post_id'] = array();
+			$output_available = 0;
 		}
 	}
 	
@@ -233,13 +317,7 @@ if ($type == "post") {
 		
 	# base url
 	if ($base_url) {$filters['base_url'] = $base_url;}
-	
-	# ordering?
-	$safe_order_by = "published_on";
-	if ($order_by == "cited") {$safe_order_by = "cited";}
-	if ($order_by == "published_on") {$safe_order_by = "published_on";}
-	if ($order_by == "added_on") {$safe_order_by = "added_on";}
-	
+		
 	# get posts
 	$posts = get_posts($safe_order_by, $filters);
 	
@@ -257,9 +335,11 @@ if ($type == "post") {
 		}
 	} else {
 		$buffer .= atom_header();
-		if ($posts) {
-			foreach ($posts as $post) {
-				$buffer.= post_atom_entry($post);
+		if ($output_available) {
+			if ($posts) {
+				foreach ($posts as $post) {
+					$buffer.= post_atom_entry($post);
+				}
 			}
 		}
 		$buffer .= atom_footer();

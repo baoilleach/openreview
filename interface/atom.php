@@ -29,7 +29,7 @@
 		$cached = get_cache($PAGE_URL);		
 		if ($cached) {print $cached; exit;}
 		ob_start();
-	}
+	}	
 	
 	if ($type == "search") {
 		# return OpenSearch results.

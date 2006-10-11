@@ -56,7 +56,10 @@
 		plinkto("blogs.php");
 	}
 	else if ($PAGE_TYPE == "stats") {
-		plinkto("blogs.php");
+		plinkto("stats.php");
+	}
+	else if ($PAGE_TYPE == "news") {
+		plinkto("news.php");
 	}
 	else {
 		plinkto("index.php");
@@ -83,9 +86,9 @@
 <div class='title_login'>
 <?
 	if ($logged_on) {
-		# print "Logged on as $logged_on (<a href='".linkto("index.php", $page_vars, array("logout" => true))."'>log out</a>)";
+		print "Logged on as $logged_on (<a href='".linkto("index.php", $page_vars, array("logout" => true))."'>log out</a>)";
 	} else {
-		# print "<a href='".linkto("login.php", $page_vars)."'>log in or register</a>";
+		#print "<a href='".linkto("login.php", $page_vars)."'>log in or register</a>";
 	}
 ?>
 </div>
