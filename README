@@ -61,7 +61,7 @@ To bootstrap the database:
 
 	utils/sync_opml.pl
 	
-This will seed the database with a bunch of science blogs.
+This will seed the database with a bunch of science blogs (skip this step, if you like, and go straight to "logging in as admin")
 
 Running Postgenomic for the first time:
 
@@ -80,14 +80,12 @@ Voila! Fire up your web browser and go see what's there.
 Run ./pipeline.pl once a day.
 Run ./weekly_pipeline.pl once a week.
 
-To add new blogs / categories:
+Logging in as admin:
 
-1) Go into the database with a MySQL client
-2) Insert a name / password pair into the "users" table
-3) Remember the user_id
-4) Insert a role of "is_admin" into the "roles" table, with a user_id of (whatever the user_id above is)
-5) Go to http://your.server/login.php and log in with the name / password pair from above
-6) You should now see an "Admin" tab in the menubar.
+Fire up your browser and visit your Postgenomic installation.
+Go to the "login.php" page (which isn't linked to: you'll have to type it into the browser address bar)
+Enter a username and password, then check the "I'm a new user" checkbox
+The first user you create will automatically get admin privileges - an "Admin" tab should appear on the menubar. Click on it to get to interfaces where you can add new blogs and assign privileges to other users (eventually).
 
 Good luck. Don't hesitate to email me if there are any problems....
 
