@@ -46,8 +46,14 @@ if ($_POST['blogs']) {
 				$home_url = mysql_escape_string($rss->channel['link']);
 				
 				if ($title && $home_url) {
+					$blog_image = $config['default_image'];
+					if ($config['default_image_alternate']) {
+						if (rand(10) <= 5) {
+							$blog_image = $config['default_image_alternate'];
+						}
+					}
 					print "<h3>$url validated</h3>";
-					$query = "INSERT INTO blogs (title, url, feed_url, added_on, image) VALUES ('$title', '$home_url', '$url', CURRENT_TIMESTAMP(), '".$config['default_image']."')";
+					$query = "INSERT INTO blogs (title, url, feed_url, added_on, image) VALUES ('$title', '$home_url', '$url', CURRENT_TIMESTAMP(), '".$blog_image."')";
 					$results = mysql_query($query);
 				} else {
 					print "<h3>$url missing link or title</h3>";
