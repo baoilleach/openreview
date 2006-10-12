@@ -18,8 +18,18 @@ my $DEFAULT_LOG_DIR = "logs/";
 my $DEFAULT_CONF_DIR = "conf/";
 our $DEBUG = 1;
 
+# look for config files...
+my @config_files = glob($DEFAULT_CONF_DIR."*.conf");
+my $conf_file = "default.conf";
+foreach my $file (@config_files) {
+	if ($file =~ /([\w\d\.\-]+)\.conf/i) {$file = $1.".conf";}
+	if ($file ne $conf_file) {
+		$conf_file = $file;
+	}
+}
+
 our %config;
-my $config = new Config::Natural $DEFAULT_CONF_DIR."default.conf" or log_error("Couldn't load pipeline configuration file", 1);
+my $config = new Config::Natural $DEFAULT_CONF_DIR.$conf_file or log_error("Couldn't load pipeline configuration file", 1);
 my @params = $config->param;
 foreach my $param (@params) {
 	$config{$param} = $config->param($param);
@@ -170,8 +180,7 @@ sub translate_date {
     		$mysql_date = "$year-$month-$day $time";
   	}
 
-
-  	if ($created =~ /(\d{4}-\d{2}-\d{2})T(\d{2}\:\d{2}\:\d{2})([+-Z])/) {
+  	if ($created =~ /(\d{4}-\d{2}-\d{2})T(\d{2}\:\d{2}\:\d{2})(?:[\.0]*)([+-Z])/) {
     		# RSS feed stylee.
     		my $date = $1;
     		my $time = $2;
@@ -179,8 +188,8 @@ sub translate_date {
   	}
 
   	if (!$mysql_date) {
-    		# unknown format - replace with current timestamp.
-		$mysql_date = get_timestamp();
+    		# unknown format - replace with a timestamp from yesterday (so that the posts don't go to the top of the sorted list).
+		$mysql_date = get_timestamp(1);
 	}
 
 	return $mysql_date;
@@ -286,7 +295,12 @@ sub write_log {
 }
 
 sub get_timestamp {
+	my $days_ago = $_[0];
+	
 	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	
+	if ($days_ago) {$mday = ($mday - $days_ago); if ($mday <= 0) {$mday = 1;}}
+	
 	return sprintf("%4d-%02d-%02d %02d:%02d:%02d", $year+1900,$mon+1,$mday,$hour,$min,$sec);
 }
 
