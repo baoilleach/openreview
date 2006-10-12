@@ -25,8 +25,10 @@ my @files = glob("posts/feed_info*");
 foreach my $file (@files) {
 	my %details = parse_feed_xml($file);
 	
-	# sometimes the description gets muckup up...
+	# sometimes the description gets mucked up...
 	if (length($details{"description"}) >= 320) {$details{"description"} = "";}
+	if ($details{"description"} =~ /no such attr/i) {$details{"description"} = "";}
+	if ($details{"description"} =~ /internal server error/i) {$details{"description"} = "";}	
 	
 	# everything after the feed_info_ part is the feed url hash...
 	my $hash;
@@ -41,7 +43,12 @@ foreach my $file (@files) {
 		$sql->execute($details{"description"}, $blog_id);
 		
 		my $sql = $db->prepare("UPDATE blogs SET image=? WHERE ISNULL(image)");
-		$sql->execute($config{"default_image"});
+		
+		if ((rand(10) <= 5) && ($config{"default_image_alternate"})) {
+			$sql->execute($config{"default_image_alternate"});
+		} else {
+			$sql->execute($config{"default_image"});	
+		} 
 	}
 }
 
