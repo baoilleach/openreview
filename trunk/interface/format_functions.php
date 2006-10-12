@@ -769,8 +769,18 @@ function print_post($post, $filters = array()) {
 
 function print_blog($blog, $filters = array()) {
 	global $page_vars;
+	if (!$blog['active']) {
+		print "<div class='blogbox blogbox_inactive'>";	
+		print "<div class='blogbox_title'>";		
+		print "<a href='".linkto("blog_search.php", $page_vars, array("blog_id" => $blog['blog_id']))."'>".$blog['title']."</a>";
+		print "</div>";
+		print "<p><i>This blog is inactive - it is no longer aggregated. <a href='".linkto("manage_blogs.php", array(), array("workspace" => $filters['workspace'], "restore_blog_id" => $blog['blog_id']))."'>Click here</a> to restore it.</i>";
+		print "</div>";
+		return;
+	}
+	
 	print "<div class='blogbox'>";
-
+	
 	if (isset($blog['incoming_bloglove'])) {
 		print "<a href='".linkto("blog_search.php", $page_vars, array("blog_id" => $blog['blog_id']))."'><div class='scorebox'><img border='0' style='border: 0px;' src='images/link.png'/>".$blog['incoming_bloglove'];
 		
@@ -812,7 +822,10 @@ function print_blog($blog, $filters = array()) {
 	$tags_array = get_blog_categories($blog['blog_id']);
 	$tags = array();
 	
-	if ($filters['add_tag']) {
+	if ($filters['add_tag']) {	
+ 		print "<p><i>This blog is active - new posts will be aggregated. <a href='".linkto("manage_blogs.php", array(), array("workspace" => $filters['workspace'], "remove_blog_id" => $blog['blog_id']))."'>Click here</a> to delete it.</i>";		
+			
+		# controls that allow you to add and remove tags
 		foreach ($tags_array as $tag) {
 			$id = $blog['blog_id'].":".$tag;
 			array_push($tags, "<a id='$id' onclick='switchClass(this);' class='tag_selected'>$tag</a>");

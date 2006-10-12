@@ -19,6 +19,20 @@ while ($row = mysql_fetch_assoc($results)) {
 </div>
 <div class='content'>
 <?
+if ($_SAFE['restore_blog_id']) {
+	if (is_numeric($_SAFE['restore_blog_id'])) {
+		$query = "UPDATE blogs SET active=1 WHERE blog_id=".$_SAFE['restore_blog_id'];
+		mysql_query($query);
+	}
+}
+
+if ($_SAFE['remove_blog_id']) {
+	if (is_numeric($_SAFE['remove_blog_id'])) {
+		$query = "UPDATE blogs SET active=0 WHERE blog_id=".$_SAFE['remove_blog_id'];
+		mysql_query($query);	
+	}
+}
+
 if ($_POST['blogs']) {
 	$blogs = $_POST['blogs'];
 	$blogs = preg_split("/[\s\r\n]+/i", $blogs);
@@ -69,7 +83,7 @@ if ($_POST['blogs']) {
 	}
 	
 	if (sizeof($blog_ids)) {
-		$blogs = get_blogs($blog_ids, array("latest" => true, "limit" => 1000, "show_new_blogs" => true));
+		$blogs = get_blogs($blog_ids, array("latest" => true, "limit" => 1000, "show_new_blogs" => true, "show_inactive" => true));
 	
 		foreach ($blogs as $blog) {
 			print_blog($blog, array("add_tag" => true, "workspace" => $workspace));

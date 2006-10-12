@@ -1,7 +1,7 @@
 <?
 
 function get_all_categories() {
-	$query = "SELECT DISTINCT tag FROM tags WHERE !ISNULL(blog_id) ORDER BY tag ASC";
+	$query = "SELECT DISTINCT tag FROM tags, blogs WHERE !ISNULL(tags.blog_id) AND blogs.blog_id = tags.blog_id AND blogs.active=1 ORDER BY tag ASC";
 	$results = mysql_query($query);
 	
 	$tags = array();
@@ -118,11 +118,15 @@ function get_blogs($blogs = array(), $filters = array()) {
 	} else {
 		$query = "SELECT SQL_CALC_FOUND_ROWS blogs.*, blog_stats.*, blogs.blog_id AS blog_id FROM blogs LEFT JOIN blog_stats ON blog_stats.blog_id = blogs.blog_id WHERE 1 ";
 	}
-	
+		
 	if ($filters['show_new_blogs']) {
 		$where_clause = "";		
 	} else {
 		$where_clause = " AND !ISNULL(blog_stats.rank)";
+	}
+	
+	if (!$filters['show_inactive']) {
+		$where_clause .= " AND active >= 1";
 	}
 	
 	if ($filters['require_portraits']) {
