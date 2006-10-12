@@ -121,6 +121,7 @@ function paper_atom_entry($paper) {
 	"
 	<entry>
 		<title><![CDATA[".$paper['title']."]]></title>
+		<author>".$paper['journal']."</author>
 		<link rel='alternate' href=\"".$paper['url']."\"/>
 		<id>".slinkto("paper.php", array(), array("paper_id" => $paper['paper_id']))."</id>
 		<updated>".atom_date($paper['added_on'])."</updated>
@@ -175,6 +176,7 @@ function post_atom_entry($post, $filters = array()) {
 "
 <entry>
 	<title><![CDATA[".$post['title']."]]></title>
+	<author>".$post['blog_name']."</author>
 	<link rel='alternate' href=\"".$post['url']."\"/>
 	$image
 	<id>".slinkto("post.php", array(), array("post_id" => $post['post_id']))."</id>
