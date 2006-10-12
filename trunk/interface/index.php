@@ -6,6 +6,7 @@
 <? include("header.php"); ?>
 <?
 	$last_week = date("Y-m-d", mktime(0,0,0, date(m), date(d)-7,date(Y))); 
+	$last_fortnight = date("Y-m-d", mktime(0,0,0, date(m), date(d)-14,date(Y))); 
 	$last_month = date("Y-m-d", mktime(0,0,0, date(m)-1, date(d),date(Y))); 
 		
 	#$blogs = false;
@@ -82,13 +83,25 @@ print "</div>";
 ?>	
 </td>
 <td valign='top' width='50%'>
-<h3>Recently published hot papers</h3>
 <?
-	$papers = get_top_papers($safe_category, $last_month);
-	foreach ($papers as $paper) {print_paper($paper, array("display" => "minimal", "show_byline" => false));}
-	
-	print "<div class='read_more'><a href='".linkto("papers.php", $page_vars, array("order_by" => "cited", "timeframe" => "1m"))."'>read more recently popular papers...</a></div>";
-	print "</div>";
+	if ($config['collect_papers']) {
+		print "<h3>Recently added hot papers</h3>";
+		$papers = get_top_papers($safe_category, $last_fortnight);
+		foreach ($papers as $paper) {print_paper($paper, array("display" => "minimal", "show_byline" => false));}
+
+		print "<div class='read_more'><a href='".linkto("papers.php", $page_vars, array("order_by" => "cited", "timeframe" => "1m"))."'>read more recently popular papers...</a></div>";
+		print "</div>";
+	} else {
+		print "<h3>Most popular posts this month</h3>";
+		$posts = get_top_posts($safe_category, $last_month, 5);
+		print "<div class='popular'>";
+		foreach ($posts as $post) {
+			print_post($post, array("image" => true));
+		}
+
+		print "<div class='read_more'><a href='".linkto("posts.php", $page_vars, array("order_by" => "cited", "timeframe" => "1w"))."'>read more recently popular posts...</a></div>";
+		print "</div>";
+	}
 ?>
 	
 </td>
