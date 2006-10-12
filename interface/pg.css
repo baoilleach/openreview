@@ -627,3 +627,9 @@ p {padding: 4px;}
 	background-color: #FFCCBF;
 	padding: 10px;
 }
+
+/* Remember to add this to the new stylesheet */
+.blogbox_inactive {
+	background-color: #EEEEEE;
+	opacity: 0.6;
+}
