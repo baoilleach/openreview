@@ -1,15 +1,84 @@
 <?
+# The search function in Postgenomic can use PyLucene or MySQL's 'LIKE' clause.
+# In the former case the URL to a PyLucene script is called and the results parsed.
+# That's why the parse_search_results() function takes in a text file.
+# At some point we should switch over to using OpenSearch as the file format instead of our
+# "custom" text file (list of matched filenames followed by three lines of metadata)
+
 function do_search($term, $safe_skip = 0, $max = false, $safe_type = "any") {
 	global $config;
 	
 	$safe_search = reduce_to_ascii($term, true);
 	if (!$max) {$max = $config['search_results_per_page'];} # $max is per page, not the limit of the number of results
 	
-	$url = $GLOBALS['config']['pylucene_url']."?q=".urlencode($safe_search)."&start=$safe_skip&max=$max&type=$safe_type";
 	
-	$results = download_url($url);
+	# rather confusingly the "do_search" config variable actually means "use PyLucene?". If do_search is 0 then we use
+	# MySQL's built in search functionality instead.
+	if ($config['do_search']) {
+		# use PyLucene
+		$url = $GLOBALS['config']['pylucene_url']."?q=".urlencode($safe_search)."&start=$safe_skip&max=$max&type=$safe_type";	
+		$results = download_url($url);
+	} else {
+		# use MySQL
+		$results = do_mysql_search($safe_search, $safe_skip, $max, $safe_type);
+	}
 	
 	return $results;
+}
+
+function do_mysql_search($search, $skip = 0, $max = false, $type = "any") {
+	# $type can be: any, posts, papers, blogs
+	# $skip is number of results to skip
+	# $max is number of results to return?
+	# $search is actual search term.
+	
+	$return = "";
+		
+	$sresults = array();
+	$total_results = 0;
+	
+	if (($type == "posts") || ($type == "any")) {
+		$query = "SELECT DISTINCT filename, added_on FROM posts WHERE (title LIKE '%".$search."%' OR summary LIKE '%".$search."%')";
+		$results = mysql_query($query);
+		while ($row = mysql_fetch_assoc($results)) {
+			$sresults[$row['filename']] = $row['added_on'];
+			$total_results++;
+		}
+	}
+	if (($type == "papers") || ($type == "any")) {
+		$query = "SELECT DISTINCT paper_id, added_on FROM papers WHERE (title LIKE '%".$search."%' OR abstract LIKE '%".$search."%' OR authors LIKE '%".$search."%')";
+		$results = mysql_query($query);
+		while ($row = mysql_fetch_assoc($results)) {
+			$sresults["paper_".$row['paper_id'].".xml"] = $row['added_on'];
+			$total_results++;
+		}		
+	}
+	if (($type == "blogs") || ($type == "any")) {
+		# bit of a hack here so that blogs always appear at the top of the search results.
+		$query = "SELECT DISTINCT feed_url, CURRENT_TIMESTAMP() AS added_on FROM blogs WHERE (title LIKE '%".$search."%' OR description LIKE '%".$search."%')";
+		$results = mysql_query($query);
+		while ($row = mysql_fetch_assoc($results)) {
+			$sresults["feed_info_".md5($row['feed_url'])] = $row['added_on'];
+			$total_results++;
+		}		
+	}
+	
+	# sort sresults by value
+	arsort($sresults);
+	
+	$counter = 0;
+	foreach ($sresults as $sresult => $added_on) {
+		if (($counter >= $skip) && ($counter <= ($skip + $max))) {
+			$return .= $sresult."\n";
+		}
+		$counter++;
+	}
+	
+	$return .= "===META=TYPE===".$total_results."===\n";
+	$return .= "===META=TOTAL===".$total_results."===\n";	
+	$return .= "===META=LIMIT===".$max."===\n";
+
+	return $return;
 }
 
 function parse_search_results($results) {

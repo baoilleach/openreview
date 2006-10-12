@@ -109,7 +109,7 @@
 	if ($config['collect_links']) {print_menu_item("links.php", "Links", "links");}
 	print_menu_item("posts.php", "Posts", "posts");
 	print_menu_item("blogs.php", "Blogs", "blogs");
-	if ($config['do_search']) {print_menu_item("search.php", "Search", "search");}
+	print_menu_item("search.php", "Search", "search");
 	print_menu_item("stats.php", "Zeitgeist", "zeitgeist");
 	if ($config['do_wiki']) {print_menu_item("wiki/doku.php", "Wiki", "wiki");}
 	

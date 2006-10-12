@@ -26,7 +26,7 @@ function get_top_papers($category = false, $timeframe = false, $filters = array(
 	
 	$filters["limit"] = 8;
 	if ($category) {$filters["category"] = $category;}
-	if ($timeframe) {$filters["published_after"] = $timeframe;}
+	if ($timeframe) {$filters["added_after"] = $timeframe;}
 		
 	return get_papers("cited", $filters);
 }
