@@ -7,14 +7,20 @@
 <? include("header.php"); ?>
 <? include("blogs_menu.php"); ?>
 <div class='sidebar'>
-<h3>Suggest</h3>
+<div class='sidebox'>
+<div class='sidebox_title'>Suggest</div>
+<div class='sidebox_content'>
 Know of a science blog that should be included here? 
 <?
 	$email = $GLOBALS["config"]["email"];
 	
 	print "<a href='mailto:$email'>Suggest it</a>";
 ?>
-<h3>Subscribe</h3>
+</div>
+</div>
+<div class='sidebox'>
+<div class='sidebox_title'>Subscribe</div>
+<div class='sidebox_content'>
 <?
 if ($safe_category) {
 	print "<p>Subscribe to new blogs from the ".strtolower($safe_category)." category:";
@@ -22,15 +28,11 @@ if ($safe_category) {
 
 feedbox("New blogs", "atom.php?category=$safe_category&type=latest_blogs");
 ?>
-<h3>Search</h3>
-<div class='searchbox'>
-<form action='search.php' method='GET'>
-<input class='textbox' style='width: 140px;' type='text' name='search'/> <input type='submit' value='Search' />
-<p>
-<input type='radio' name='type' value='any'>Anything
-<input type='radio' checked name='type' value='blogs'>Blogs
-</form>
 </div>
+</div>
+<?
+	print_searchbox("Blogs");
+?>
 </div>
 <div class='content'>
 <?

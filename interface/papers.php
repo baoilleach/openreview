@@ -56,7 +56,9 @@
 	if ($safe_comment_source) {$page_vars['comment_source'] = $safe_comment_source;}
 ?>
 <div class='sidebar'>
-	<h3>Limits</h3>
+	<div class='sidebox'>
+	<div class='sidebox_title'>Limits</div>
+	<div class='sidebox_content'>
 	<p>Sort by <a href='<? plinkto("papers.php", $page_vars, array("order_by" => "added_on")); ?>' <? if ($safe_order_by == "added_on") {print "class='selected'";} ?>>date added</a>,
 	<a href='<? plinkto("papers.php", $page_vars, array("order_by" => "published_on")); ?>' <? if ($safe_order_by == "published_on") {print "class='selected'";} ?>>date published</a>
 	or <a href='<? plinkto("papers.php", $page_vars, array("order_by" => "cited")); ?>' <? if ($safe_order_by == "cited") {print "class='selected'";} ?>>popularity</a>
@@ -77,7 +79,7 @@
 <?
 		print "<h3>Limit to journal</h3>";
 		
-		if ($safe_journal) {print " <p>limiting to results from <b>$safe_journal</b> (<a href='".linkto("papers.php", $page_vars, array("journal" => false))."'>remove limit</a>)";}
+		if ($safe_journal) {print " <p>limiting to results from <span class='selected'>$safe_journal</span> (<a href='".linkto("papers.php", $page_vars, array("journal" => false))."'>remove limit</a>)";}
 				
 		$journals = get_journals($safe_category, 100, "count DESC");
 		natcasesort($journals);
@@ -96,7 +98,11 @@
 			print "<p>Note that only journals with papers that have been commented on by blogs in this category will appear in the box above.";
 		}
 ?>	
-<h3>Subscribe</h3>
+</div>
+</div>
+<div class='sidebox'>
+<div class='sidebox_title'>Subscribe</div>
+<div class='sidebox_content'>
 <? 
 	if ($safe_category && $safe_journal) {
 		print "<p>Subscribe to ".strtolower($safe_category)." papers from $safe_journal:";
@@ -109,7 +115,11 @@
 	feedbox("Latest papers", "atom.php?category=$safe_category&journal=$safe_journal&type=latest_papers"); 		
 	feedbox("Recent hot papers", "atom.php?category=$safe_category&journal=$safe_journal&type=popular_papers");
 ?>
-<h3>Show papers with comments from...</h3>
+</div>
+</div>
+<div class='sidebox'>
+<div class='sidebox_title'>Show papers with comments from...</div>
+<div class='sidebox_content'>
 <?
 		if ($safe_comment_source) {print " <p>limiting to papers with comments from <b>$safe_comment_source</b> (<a href='".linkto("papers.php", $page_vars, array("comment_source" => false))."'>remove limit</a>)";}
 ?>
@@ -122,15 +132,11 @@
 <div class='basic_thumbnail'><a href='<? plinkto("papers.php", $page_vars, array("comment_source" => "Science")); ?>'><img border='0' src='images/science_comment.png'/></a></div>
 -->
 <div class='postbox_footer'>&nbsp;</div>
-<h3>Search</h3>
-<div class='searchbox'>
-<form action='search.php' method='GET'>
-<input class='textbox' style='width: 140px;' type='text' name='search'/> <input type='submit' value='Search' />
-<p>
-<input type='radio' name='type' value='any'>Anything
-<input type='radio' checked name='type' value='papers'>Papers
-</form>
 </div>
+</div>
+<?
+	print_searchbox("Papers");
+?>
 </div>
 <div class='content'>
 <?

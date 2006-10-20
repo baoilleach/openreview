@@ -13,29 +13,41 @@
 	$similar = get_similar_tags($safe_tag, 50);
 	
 	if ($similar) {
-		print "<h3>Similar tags</h3>";
+		print "<div class='sidebox'>";
+		print "<div class='sidebox_title'>Similar tags</div>";
+		print "<div class='sidebox_content'>";
 		print "<p class='description'>Posts tagged with \"$safe_tag\" are also tagged with...</p>";
 		print_tagcloud($similar);
+		print "</div>";
+		print "</div>";
 	}
 	
 	$users = find_connotea_users_with($safe_tag, 10);
 	
 	if ($users) {
-		print "<h3>Connotea users</h3>";
+		print "<div class='sidebox'>";
+		print "<div class='sidebox_title'>Connotea users</div>";
+		print "<div class='sidebox_content'>";
 		print "<p class='description'>Connotea users who tag items with \"$safe_tag\" include...</p>";
 		foreach ($users as $key => $value) {
 			print "<p><a href='http://www.connotea.org/user/$key'>$key</a>";
 		}
+		print "</div>";
+		print "</div>";
 	}
 	
 	$blogs = get_blogs_using_tag($safe_tag, 25);
 	
 	if ($blogs) {
-		print "<h3>Blogs</h3>";
+		print "<div class='sidebox'>";
+		print "<div class='sidebox_title'>Blogs</div>";
+		print "<div class='sidebox_content'>";
 		print "<p class='description'>Blogs containing posts tagged \"$safe_tag\" include...</p>";
 		foreach ($blogs as $key => $value) {
 			print "<p><a href='".linkto("blog_search.php", $GLOBALS['page_vars'], array("blog_id" => $key))."'>$value</a>";
 		}
+		print "</div>";
+		print "</div>";
 	}
 	
 	print "</div>";
@@ -44,7 +56,7 @@
 		
 	if ($safe_tag) {
 	
-		print "<h1>Search results for tag \"$safe_tag\"</h1>";
+		print "<h1>Items tagged with \"$safe_tag\"</h1>";
 			
 		$paper_ids = array();
 		$paper_ids = get_papers_with_tag($safe_tag, true);

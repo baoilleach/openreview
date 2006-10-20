@@ -11,7 +11,7 @@ urchinTracker();
 <?
 	}
 ?>
-<div class='footer'>
+<div class='footer' style='clear: both; margin-top: 20px;'>
 <? print $config['copyright_notice']; ?>
 </div>
 </body>

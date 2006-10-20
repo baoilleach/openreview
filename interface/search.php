@@ -28,16 +28,18 @@
 	$blogs = $return["blogs"];
 	$papers = $return["papers"];
 ?>
-<h1>Search</h1>
 <div class='searchbox'>
+<div class='searchbox_title'>Search</div>
+<div class='searchbox_content'>
 <form action='search.php' method='GET'>
 <input class='textbox' style='width: 80%;' type='text' name='search' <? if ($safe_search) {print "value='$safe_search'";} ?>/> <input type='submit' value='Search' />
 <p>
-<input type='radio' <? if ($safe_type == "any") {print "checked";} ?> name='type' value='any'>Anything
-<input type='radio' <? if ($safe_type == "posts") {print "checked";} ?> name='type' value='posts'>Posts
-<input type='radio' <? if ($safe_type == "papers") {print "checked";} ?> name='type' value='papers'>Papers
-<input type='radio' <? if ($safe_type == "blogs") {print "checked";} ?> name='type' value='blogs'>Blogs
+<input type='radio' style='background-color: transparent;' <? if ($safe_type == "any") {print "checked";} ?> name='type' value='any'>Anything
+<input type='radio' style='background-color: transparent;' <? if ($safe_type == "posts") {print "checked";} ?> name='type' value='posts'>Posts
+<input type='radio' style='background-color: transparent;' <? if ($safe_type == "papers") {print "checked";} ?> name='type' value='papers'>Papers
+<input type='radio' style='background-color: transparent;' <? if ($safe_type == "blogs") {print "checked";} ?> name='type' value='blogs'>Blogs
 </form>
+</div>
 </div>
 <?
 	if ($total_results) {

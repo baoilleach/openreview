@@ -24,7 +24,7 @@
 ?>
 <div class='content fullwidth'>
 <div class='frontpage_welcome'>
-<h1>welcome to postgenomic</h1>
+<h1>Welcome to Postgenomic</h1>
 <p>Postgenomic collects data from hundreds of science blogs and then does useful and interesting things with it.
 <p>With Postgenomic, you can:
 <ul>
@@ -38,40 +38,46 @@
 <div class='frontpage_tabs'>
 <?
 	print "<div class='frontpage_tab'>";
-	#print "<h3>Tags</h3>";
-	#print_tagcloud($random_tags);
-	print "<h3>Top Terms Today</h3>";
+	print "<div class='tab_padding'>";
+	print "<div class='tab_title'>Top Terms Today</div>";
 	$terms = get_terms(32, $safe_category);
 	$terms = clean_terms($terms);
 	print_termcloud($terms);
 	print "</div>";
+	print "</div>";
 	
-	print "<div class='frontpage_tab'>";
+	print "<div class='frontpage_tab' style='text-align: center; vertical-align: center;'>";
+	print "<div class='tab_padding'>";
 	#print "<h3>Top cited journals</h3>";
-	print "<h3>Latest posts</h3>";
+	print "<div class='tab_title'>Latest posts</div>";
 	print "<div class='slidebox'>";
 	$slides = print_blogger_slides($safe_category);
 	print "</div>";
 	#$journal_stats = get_journal_stats($safe_category);
 	#print_journalcloud($journal_stats, 15);
 	print "</div>";
+	print "</div>";
 
-	print "<div class='frontpage_tab'>";	
-	print "<h3>Most active blogs</h3>";
+	print "<div class='frontpage_tab'>";
+	print "<div class='tab_padding'>";	
+	print "<div class='tab_title'>Most active blogs</div>";
 	$active_blogs = get_active_blogs($safe_category, $last_week, 15);
 	print_blogcloud($active_blogs);
 	print "</div>";
+	print "</div>";
+	
 ?>
 <div class='frontpage_footer'>&nbsp;</div>
 </div>
 <script type="text/javascript">
     start_slideshow(1, <? print $slides; ?>, 4000);
 </script>
-<table width='100%' cellspacing='10' cellpadding='0'>
-<tr>
-<td valign='top' width='50%'>
-<h3>Most popular posts this week</h3>
+<div class='frontpage_tabs'>
+<div class='frontpage_tab2'>	
+<div class='tab_padding'>
 <?
+print "<div class='tab_title'>Popular posts this week</div>";
+	
 $posts = get_top_posts($safe_category, $last_week, 5);
 print "<div class='popular'>";
 foreach ($posts as $post) {
@@ -81,18 +87,20 @@ foreach ($posts as $post) {
 print "<div class='read_more'><a href='".linkto("posts.php", $page_vars, array("order_by" => "cited", "timeframe" => "1w"))."'>read more recently popular posts...</a></div>";
 print "</div>";
 ?>	
-</td>
-<td valign='top' width='50%'>
+</div>
+</div>
+<div class='frontpage_tab2'>
+<div class='tab_padding'>
 <?
-	if ($config['collect_papers']) {
-		print "<h3>Recently added hot papers</h3>";
-		$papers = get_top_papers($safe_category, $last_fortnight);
-		foreach ($papers as $paper) {print_paper($paper, array("display" => "minimal", "show_byline" => false));}
-
+	$papers = get_top_papers($safe_category, $last_fortnight);
+	if (($config['collect_papers']) && (sizeof($papers))) {
+		print "<div class='tab_title'>Popular papers this week</div>";
+		
+		foreach ($papers as $paper) {print_paper($paper, array("display" => "minimal", "show_byline" => true));}
 		print "<div class='read_more'><a href='".linkto("papers.php", $page_vars, array("order_by" => "cited", "timeframe" => "1m"))."'>read more recently popular papers...</a></div>";
 		print "</div>";
 	} else {
-		print "<h3>Most popular posts this month</h3>";
+		print "<div class='tab_title'>Popular posts this month</div>";
 		$posts = get_top_posts($safe_category, $last_month, 5);
 		print "<div class='popular'>";
 		foreach ($posts as $post) {
@@ -103,9 +111,9 @@ print "</div>";
 		print "</div>";
 	}
 ?>
-	
-</td>
-</tr>
-</table>
+</div>
+</div>
+</div>	
+<div class='frontpage_footer'>&nbsp;</div>
 </div>
 <? include("footer.php"); ?>

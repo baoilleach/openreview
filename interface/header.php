@@ -10,13 +10,14 @@
 		$PAGE_TITLE .= " - ".$safe_category;
 	}
 	if (!$PAGE_TYPE) {$PAGE_TYPE = "index";}
-
 ?>
 <html>
 <head profile="http://a9.com/-/spec/opensearch/1.1/">
 	<title><? if ($title) {print $title;} else {print $PAGE_TITLE;} ?></title>
 	<link type="application/opensearchdescription+xml" rel="search" title="Postgenomic" href="<? print $config['base_url']; ?>opensearch_xml.php"/>
-	<link rel="stylesheet" type="text/css" href="pg.css"/>	
+<?
+	print_template_css($safe_category);
+?>
 	<link rel="stylesheet" type="text/css" href="lightbox.css"/>
 	<!-- tinymce must always be loaded before script.aculo.us -->
 	<!--
@@ -29,7 +30,7 @@
 	<script type="text/javascript" src="javascripts/postgenomic.js"></script>
 	
 	<!-- the Postgenomic blog is postgenomic.com specific, really... -->
-	<link rel='alternate' type='application/atom+xml' title='Postgenomic blog' href='http://www.postgenomic.org/blog/atom.xml'/>
+	<link rel='alternate' type='application/atom+xml' title='Postgenomic blog' href='http://www.ghastlyfop.com/pgtips/atom.xml'/>
 <?	
 	feedbox("Latest posts, all categories", "atom.php?type=latest_posts", true);
 	if ($config['collect_papers']) {feedbox("Latest papers, all categories", "atom.php?type=latest_papers", true);}
@@ -80,7 +81,11 @@
 	</div>
 	
 <div class='title_logo'>
-<a href='<? plinkto("index.php"); ?>'><? print $config['header_name']; ?></a> <span class='title_subheading'><? print strtolower($safe_category); ?></span>
+<a href='<? plinkto("index.php"); ?>'>
+<?
+	print $config['header_name']; 
+?>
+</a>
 </div>
 </div>
 <div class='title_menu'>
@@ -94,29 +99,34 @@
 ?>
 </div>
 <?
-	function print_menu_item($page, $page_title, $page_type = false) {
+	function print_menu_item($page, $page_title, $page_type = false, $override = array()) {
 		global $page_vars;
 		global $PAGE_TYPE;
-		$selected = "";
+		$selected = "class='title_menu_button'";
 		if ($PAGE_TYPE == $page_type) {
-			$selected = "class='tab_selected'";
+			$selected = "class='title_menu_button_selected'";
 		}
-		print "<a $selected href='".linkto($page, $page_vars)."'>$page_title</a>&nbsp;";
+		print "<div $selected><a href='".linkto($page, $page_vars, $override)."'>$page_title</a>&nbsp;</div>";
 	}
 
-	print_menu_item("index.php", "Home", "index");
+	$frontpage_name = "Home";
+	if (strlen($safe_category)) {
+		print_menu_item("index.php", $safe_category, "index");
+		$frontpage_name = "All categories";
+	}
+
+	print_menu_item("index.php", $frontpage_name, "main_index", array("category" => false));
+
 	if ($config['collect_papers']) {print_menu_item("papers.php", "Papers", "papers");}
 	if ($config['collect_links']) {print_menu_item("links.php", "Links", "links");}
 	print_menu_item("posts.php", "Posts", "posts");
 	print_menu_item("blogs.php", "Blogs", "blogs");
 	print_menu_item("search.php", "Search", "search");
 	print_menu_item("stats.php", "Zeitgeist", "zeitgeist");
-	if ($config['do_wiki']) {print_menu_item("wiki/doku.php", "Wiki", "wiki");}
+	if ($config['do_wiki']) {print_menu_item("wiki/doku.php", "Help", "wiki");}
 	
 	if ($logged_on && $is_admin) {
-?>
-<a href='<? plinkto("admin.php", $page_vars); ?>'>Admin</a>
-<?		
+		print_menu_item("admin.php", "Admin", "admin");
 	}
 ?>
 </div>
