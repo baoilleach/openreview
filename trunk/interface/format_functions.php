@@ -101,9 +101,6 @@ function print_blog_stats($blog_id) {
 	if ($stats['readability_kincaid'] > 12) {$stats['readability_kincaid'] = 12;}
 
 	printf("
-<h3>Stats</h3>
-<p>Statistics are based on posts from the past ninety days.
-<p><br/>
 <div class='statsbox'>
 <h2># %s</h2> rank
 <h2>%s</h2> posts
@@ -149,7 +146,6 @@ function print_journal_stats($journal, $stats = array()) {
 	if (!sizeof($stats)) {return;}
 	
 		printf("
-	<h3>Stats</h3>
 	<div class='statsbox'>
 	<h2># %s</h2> rank
 	<h2>%s</h2> papers
@@ -234,7 +230,7 @@ function print_blogger_slides($category = false) {
 		if ($counter > 1) {$display = "style='display: none;'";}
 		$blog_link = linkto("blog_search.php", $page_vars, array("blog_id" => $row["blog_id"]));
 		print "\n<div id='slideshow$counter' class='slide' $display><div>";
-		print "<a href='$blog_link'><img border='0' hspace='5' vspace='0' alt='".$row['title']."' src='".$row['image']."' align='left'/></a><a href='$blog_link'>".$row['title']."</a>
+		print "<a href='$blog_link'><img border='0' hspace='5' vspace='0' alt='".$row['title']."' src='".$row['image']."'/></a><p><a href='$blog_link'>".$row['title']."</a>
 		<p><a href='".$row['post_url']."'><b>".$row['post_title']."</b></a>";
 		print "</div></div>";
 		$counter++;
@@ -496,47 +492,45 @@ function print_paper($paper, $filters = array()) {
 		$tags = get_tags_for_paper($paper_id, true);
 	}
 
-	if ($filters['show_scorebox'] == true) {
-		print "<a href='".linkto("paper.php", $page_vars, array("paper_id" => $paper['paper_id']))."'><div class='scorebox'>";
-		print "<img border='0' src='images/comments.png'/>";
-		print $paper['cited_by'];
-		print "</div></a> ";
-	}
-	
+	# print title of paper
 	if (!$paper['title']) {$paper['title'] = "Unknown title";}
 	print "<div class='paperbox_title'>";
-	
-	if ($filters['magnify']) {print "<div class='magnify'>";}
 	$title_link = linkto("paper.php", $GLOBALS['page_vars'], array("paper_id" => $paper['paper_id']));
-	
-	if ($filters['link_through']) {$title_link = $paper['url'];}
-		
+	if ($filters['link_through']) {$title_link = $paper['url'];}		
 	print "<a href='$title_link'>".$paper['title']."</a>";
-	if ($filters['magnify']) {print "</div>";}
-		
 	print "</div>";
-	
-	if ($tags) {
-		print "<div class='tagbox'>Tags: ";
-		foreach ($tags as $tag) {
-			print "<a href='".linkto("tag_search.php", $GLOBALS['page_vars'], array("tag" => $tag))."'>$tag</a> ";
-		}
-		print "</div>";
-	}
-	
+				
 	if ($filters['show_byline'] == true) {
 		print "<div class='paperbox_byline'>";
 		
 		print connotea_link($paper['url']);
-
-		print "<a href='".linkto("journal_search.php", $GLOBALS['page_vars'], array("journal_id" => $paper['journal']))."'>".$paper['journal']."</a> <span class='date'>".date("D jS M y", strtotime($paper['pubdate']))."</span> <span class='author'>".$paper['authors']."</span></div>";
-	}
 		
-	if ($filters['show_abstract'] == true) {
-		if ($paper['abstract']) {
-			print "<div class='paperbox_abstract'>".$paper['abstract']."</div>";
+		if (($filters['show_scorebox'] == true) && ($paper['cited_by'])) {
+			print print_rating($paper['cited_by'], linkto("paper.php", $page_vars, array("paper_id" => $paper['paper_id'])));
 		}
+		
+		print " published in <a href='".linkto("journal_search.php", $GLOBALS['page_vars'], array("journal_id" => $paper['journal']))."'>".$paper['journal']."</a> on <span class='date'>".date("D jS M y", strtotime($paper['pubdate']))."</span>";
+		if ($filters['show_abstract'] == true) {
+				print "<br/><span class='author'>".$paper['authors']."</span>";
+		}
+		print "</div>";
 	}
+	
+	if ($tags) {
+		print "<div class='tagbox'>";
+		foreach ($tags as $tag) {
+			print "<a href='".linkto("tag_search.php", $GLOBALS['page_vars'], array("tag" => $tag))."'>$tag</a> ";
+		}
+		print "</div>";
+	}	
+	
+	if (($filters['show_abstract']) && ($paper['abstract'])) {
+		print "<div class='paperbox_abstract'>";		
+		print $paper['abstract'];
+		print "</div>";
+	}
+	
+	print "</div>";
 	
 	if ($filters['add_comment']) {
 		if ($logged_on) {
@@ -550,7 +544,6 @@ function print_paper($paper, $filters = array()) {
 		if ($posts) {	
 			print "<div class='paperbox_posts'>";
 			print "<h3>Posts</h3>";
-
 			foreach ($posts as $post) {
 				print_post($post, array("image" => true));
 			}
@@ -561,10 +554,9 @@ function print_paper($paper, $filters = array()) {
 	if ($filters['show_comments'] == true) {
 		$comments = get_comments_for_paper($paper_id);
 
-		if ($comments) {
+		if ($comments) {		
 			print "<div class='paperbox_comments'>";
-			print "<h3>Comments</h3>";
-	
+			print "<h3>Comments</h3>";		
 			foreach ($comments as $comment) {
 				print_comment($comment);
 			}
@@ -572,8 +564,6 @@ function print_paper($paper, $filters = array()) {
 			print "</div>";
 		}
 	}
-	
-	print "</div>";
 }
 
 function print_comment_prompt() {
@@ -650,9 +640,7 @@ function print_comment($comment) {
 
 function print_link($link, $filters = array()) {
 	print "<div class='linkbox'>";
-	#print "<a href='".linkto("link_search.php", $page_vars, array("url_hash" => md5($link['url'])))."'>";
-	print "<div class='scorebox'><img src='images/link.png' border='0'/>".$link['linked_by']."</div>";
-	#print "</a>";	
+
 	print "<div class='linkbox_title'>";
 	if (!$link['titles']) {$link['titles'] = substr($link['url'],0,64)."...";} else {$link['titles'] = ucfirst($link['titles']);}
 	print "<a href='".$link['url']."'>".$link['page_title']."</a>";
@@ -663,13 +651,17 @@ function print_link($link, $filters = array()) {
 	if ( ($link['image']) && ($link['linked_by'] >= 2) ) {
 		print "<div class='linkbox_thumbnail'><img src='images/link_default.png'/></div>";
 	}
-	
+		
 	print "<div class='linkbox_byline'>";
-	
+
+		
 	print connotea_link($link['url']);
-	print " <a class='dhtml_link' onclick='showHideDiv(\"".$link['url_hash']."\")'><img src='images/comments.png' align='absmiddle' /> see which posts linked here</a>";
-	print " last linked to on <b>".date("D jS M y", strtotime($link['last_linked_on']))."</b>";
+	print "<a class='dhtml_link' onclick='showHideDiv(\"".$link['url_hash']."\")'>";
+	print print_rating($link['linked_by']);
+	print "</a>";
+	print ", most recently on <b>".date("D jS M y", strtotime($link['last_linked_on']))."</b>";
 	print "</div>";	
+
 	print "<div class='linkbox_content'>";
 	print "<p>".$link['titles'];
 	print "<div id='".$link['url_hash']."' class='linkbox_posts'  style='display: none;'>";
@@ -680,8 +672,10 @@ function print_link($link, $filters = array()) {
 	}
 	print "</div>";
 	print "</div>";
-	print "</div>";
+	
 	print "<div class='linkbox_footer'>&nbsp;</div>";
+		
+	print "</div>";
 }
 
 function lightbox($url, $caption = false) {
@@ -710,13 +704,44 @@ function connotea_link($url) {
 	return "<a style='cursor:pointer;' onclick=\"javascript:u='".$url."';a=false;x=window;e=x.encodeURIComponent;d=document;w=open('http://www.connotea.org/addpopup?continue=confirm&uri='+e(u),'add','width=400,height=400,scrollbars,resizable');void(x.setTimeout('w.focus()',200));\"><img src='images/connotea_gray.gif' style='border: 0px;' border='0' alt='add bookmark to connotea' align='absmiddle' /></a>";
 }
 
+function print_rating($score, $url = false) {
+	global $config;
+	global $page_vars;
+	
+	$message = "";
+	if ($score) {
+		$message = "linked to by $score";
+	} else {
+		return "";
+	}
+	
+	if (!$config['rating_one']) {
+		$rating = 1;
+	} elseif ($score <= $config['rating_one']) {
+		$rating = 1;
+	} elseif ($score <= $config['rating_two']) {
+		$rating = 2;
+	} elseif ($score <= $config['rating_three']) {
+		$rating = 3;
+	} else {
+		$rating = 4;
+	}
+	
+	if ($url) {$return = sprintf("<a href='%s'>", $url);}
+	$return .= sprintf("<img border='0' align='absmiddle' src='images/rating_%s.png' border='0'/>%s", $rating, $message);
+	if ($url) {$return .= "</a>";}
+	
+	return $return;
+}
+
+
 function print_post($post, $filters = array()) {
+	global $config;
+	global $page_vars;
+	
 	if ($post['type'] == "review") {print "<div class='review'>";}
 	print "<div class='postbox'>";
 	print "<div class='postbox_title'>";
-	if (isset($post['linked_by'])) {
-		print "<a href='".linkto("post.php", $page_vars, array("post_id" => $post['post_id']))."'><div class='scorebox'><img src='images/link.png' border='0'/>".$post['linked_by']."</div></a>";
-	}
 	
 	if ($filters['magnify']) {print "<div class='magnify'>";}
 	if ($post['type'] == "review") {print "Review: ";}
@@ -729,12 +754,17 @@ function print_post($post, $filters = array()) {
 		print "<div class='postbox_thumbnail'><img src='".$post['blog_image']."'/></div>";
 	}
 	
-	if (!$filters['short']) {
+			
+
 		print "<div class='postbox_byline'>";
 
-		print connotea_link($post['url']);
+		print connotea_link($post['url']);		
+		if ($post['linked_by']) {
+			# use different rating icons based on the number of posts linking here.
+			print print_rating($post['linked_by'], linkto("post.php", $page_vars, array("post_id" => $post['post_id'])));
+		}
 
-		print "<a href='".linkto("blog_search.php", $GLOBALS['page_vars'], array("blog_id" => $post['blog_id']))."'>".$post['blog_name']."</a> on <span class='date'>".date("D jS M y", strtotime($post['pubdate']))."</span>";
+		print " posted to <a href='".linkto("blog_search.php", $GLOBALS['page_vars'], array("blog_id" => $post['blog_id']))."'>".$post['blog_name']."</a> on <span class='date'>".date("D jS M y", strtotime($post['pubdate']))."</span>";
 
 		if ($filters['display_geotags']) {
 			$geotags = get_geotags_for_post($post['post_id']);
@@ -748,9 +778,10 @@ function print_post($post, $filters = array()) {
 				}
 			}
 		}
-
+		
 		print "</div>";
-	
+		
+	if (!$filters['short']) {	
 		print "<div class='postbox_content'>";
 	
 		if ($filters['fulltext']) {
@@ -780,49 +811,43 @@ function print_blog($blog, $filters = array()) {
 	}
 	
 	print "<div class='blogbox'>";
-	
-	if (isset($blog['incoming_bloglove'])) {
-		print "<a href='".linkto("blog_search.php", $page_vars, array("blog_id" => $blog['blog_id']))."'><div class='scorebox'><img border='0' style='border: 0px;' src='images/link.png'/>".$blog['incoming_bloglove'];
 		
-		if ($filters['rank']) {
-			print "<div class='rankbox'>#".$blog['rank']."</div>";
-		}
-		print "</div></a>";
-	}	
+	// title
 	print "<div class='blogbox_title'>";	
-	if ($filters['magnify']) {print "<div class='magnify'>";}
 	print "<a href='".linkto("blog_search.php", $page_vars, array("blog_id" => $blog['blog_id']))."'>".$blog['title']."</a>";
-	if ($filters['magnify']) {print "</div>";}
-	print "<div class='blogbox_footer'>&nbsp;</div>";
 	print "</div>";
-	print "<div class='blogbox_content'>";
-	if ($blog['image']) {
-		print "<img src='".$blog['image']."' align='left'/>";		
-	}
-	print "<p>";
-	print "<a href='".$blog['feed_url']."'>";
-	print "<img style='border: 0px;' src='images/feed.png' border='0' align='texttop'/> ";
-	print "</a>";
-	print connotea_link($blog['url']);
-	print "<a href='".$blog['url']."'>".$blog['url']."</a>";
 
-	print "<p>".strip_tags(html_entity_decode($blog['description']));
-	
-	if ($filters['tagcloud']) {
-		print "<div class='blogbox_tags'>";
-		$tags = get_tags_for_blogs(array($blog['blog_id']), 3);
-		if ($tags) {print_tagcloud($tags);}
+	// thumbnail
+	if ($blog['image']) {
+		print "<div class='blogbox_thumbnail'>";
+		print "<img src='".$blog['image']."' align='left'/>";		
 		print "</div>";
 	}
-	print "</div>";
 	
+	// byline
+	print "<div class='blogbox_byline'>";
+	print connotea_link($blog['url']);	
+	if ($blog['incoming_bloglove']) {
+		print print_rating($blog['incoming_bloglove'])." other blogs recently<br/>";
+	}
+	print "<a href='".$blog['feed_url']."'>";
+	print "<img style='border: 0px;' src='images/feed.png' border='0' align='absmiddle'/> ";
+	print "</a>";
+	print "<a href='".$blog['url']."'>".$blog['url']."</a>";
+	print "</div>";
+
+	// blog description
+	print "<div class='blogbox_content'>";
+	print "<p>".strip_tags(html_entity_decode($blog['description']));
+	print "</div>";
 	print "<div class='blogbox_footer'>&nbsp;</div>";
 	
-	print "<div class='blogbox_byline'>";
 	$tags_array = get_blog_categories($blog['blog_id']);
 	$tags = array();
 	
 	if ($filters['add_tag']) {	
+		# IN THE ADMIN INTERFACE
+		
  		print "<p><i>This blog is active - new posts will be aggregated. <a href='".linkto("manage_blogs.php", array(), array("workspace" => $filters['workspace'], "remove_blog_id" => $blog['blog_id']))."'>Click here</a> to delete it.</i>";		
 			
 		# controls that allow you to add and remove tags
@@ -845,18 +870,50 @@ function print_blog($blog, $filters = array()) {
 		
 		$id = $blog['blog_id'].":custom";
 		print "<p>Create a custom tag? <input type='textbox' id='$id' onchange='addCustomTag(this);' value=''/>";
-		print "</div>";		
+		print "</div>";
 	} else {
+		# NOT IN THE ADMIN INTERFACE
+		$tags = array();
+		
+		if ($filters['tagcloud']) {
+			$popular_tags = get_tags_for_blogs(array($blog['blog_id']), 3);
+			foreach ($popular_tags as $key => $val) {
+				array_push($tags, "<a href='".linkto("tag_search.php", $page_vars, array("tag" => $key))."'>$key</a>");
+			}
+		}
+		
 		foreach ($tags_array as $tag) {
 			array_push($tags, "<a href='".linkto("blogs.php", $page_vars, array("category" => $tag))."'>$tag</a>");
 		}
-		print "<div class='tagbox'>Categories: ".implode(' ', $tags)."</div>";
+		print "<div class='tagbox'>".implode(' ', $tags)."</div>";
 	}
-	print "</div>";
 		
 	print "<div class='blogbox_footer'>&nbsp;</div>";
 	print "</div>";
 }
 
+function print_searchbox($type = false) {
+?>
+	<div class='searchbox'>
+	<div class='searchbox_title'>Search</div>
+	<div class='searchbox_content'>
+	<form action='search.php' method='GET'>
+	<input class='textbox' style='width: 140px;' type='text' name='search'/> <input type='submit' value='Search' />
+	<p>
+	<input style='background-color: transparent;' type='radio' name='type' value='any'>Anything
+<?
+	if ($type) {
+		print "<input style='background-color: transparent;' type='radio' checked name='type' value='$type'>$type";
+	} else {
+?>
+	<input type='radio' checked name='type' value='papers'>Papers
+<?
+	}
+?>
+	</form>
+	</div>
+	</div>
+<?
+}
 
 ?>

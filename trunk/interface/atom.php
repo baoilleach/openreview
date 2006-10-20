@@ -1,6 +1,7 @@
 <?
 	include("functions.php");
-	header("Content-type: application/atom+xml");
+	header("Content-type: application/xml");
+	#header("Content-type: application/atom+xml");
 	$type = mysql_escape_string($_GET['type']);
 	$category = mysql_escape_string($_GET['category']);
 	$tag = mysql_escape_string($_GET['tag']);

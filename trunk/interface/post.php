@@ -13,13 +13,19 @@
 	
 	if (sizeof($terms)) {
 		print "<div class='sidebar'>";
-		print "<h3>Shared Terms</h3>";
+		
+		print "<div class='sidebox'>";
+		print "<div class='sidebox_title'>Shared Terms</div>";
+		print "<div class='sidebox_content'>";
 		print "<p>Click on the terms below to see more posts on that topics.";
 		print "<div class='tagcloud'>";
 		foreach ($terms as $term) {
 			print "<a class='tagcloud_2' href='".linkto("posts.php", $page_vars, array("term" => $term))."'>$term</a> ";
 		}
 		print "</div>";
+		print "</div>";
+		print "</div>";
+		
 		print "</div>";
 	}
 ?>

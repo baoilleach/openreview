@@ -89,7 +89,9 @@
 	if ($safe_timeframe) {$page_vars['timeframe'] = $safe_timeframe;}
 ?>
 <div class='sidebar'>
-	<h3>Limits</h3>
+	<div class='sidebox'>
+	<div class='sidebox_title'>Limits</div>
+	<div class='sidebox_content'>
 	<p>Sort by <a href='<? plinkto("posts.php", $page_vars, array("order_by" => "published_on")); ?>' <? if ($safe_order_by == "published_on") {print "class='selected'";} ?>>date published</a>
 	or <a href='<? plinkto("posts.php", $page_vars, array("order_by" => "cited")); ?>' <? if ($safe_order_by == "cited") {print "class='selected'";} ?>>popularity</a>
 	
@@ -99,8 +101,13 @@
 	<a <? if ($safe_timeframe == "3m") {print "class='selected'";}?> href='<? plinkto("posts.php", $page_vars, array("timeframe" => "3m")); ?>'>quarter</a>,
 	<a <? if ($safe_timeframe == "1y") {print "class='selected'";}?> href='<? plinkto("posts.php", $page_vars, array("timeframe" => "1y")); ?>'>year</a> or
 	<a <? if ($safe_timeframe == "10y") {print "class='selected'";}?> href='<? plinkto("posts.php", $page_vars, array("timeframe" => "10y")); ?>'>show all posts</a>	
-	<h3>Subscribe</h3>
-	<? 
+</div>
+</div>
+
+<div class='sidebox'>
+<div class='sidebox_title'>Subscribe</div>
+<div class='sidebox_content'>
+		<? 
 		if ($safe_category) {
 			print "<p>Subscribe to posts in the ".strtolower($safe_category)." category:";
 		}
@@ -111,15 +118,11 @@
 		feedbox("Latest conference reports", "atom.php?category=$safe_category&type=latest_posts&tag=conference"); 	
 		feedbox("Latest original research", "atom.php?category=$safe_category&type=latest_posts&tag=original_research"); 	
 	?>
-	<h3>Search</h3>
-	<div class='searchbox'>
-	<form action='search.php' method='GET'>
-	<input class='textbox' style='width: 140px;' type='text' name='search'/> <input type='submit' value='Search' />
-	<p>
-	<input type='radio' name='type' value='any'>Anything
-	<input type='radio' checked name='type' value='posts'>Posts
-	</form>
-	</div>
+</div>
+</div>
+<?
+	print_searchbox("Posts");
+?>
 </div>
 <div class='content'>
 <?	

@@ -1,6 +1,7 @@
 <?
 	include_once("dbconnect.php");
-	include_once("paper_functions.php");	
+	include_once("paper_functions.php");
+	include_once("template_functions.php");	
 	include_once("blog_functions.php");
 	include_once("atom_functions.php");
 	include_once("tag_functions.php");

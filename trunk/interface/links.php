@@ -41,7 +41,9 @@
 		
 ?>
 <div class='sidebar'>
-<h3>Limits</h3>
+	<div class='sidebox'>
+	<div class='sidebox_title'>Limits</div>
+	<div class='sidebox_content'>
 <p>Sort by <a href='<? plinkto("links.php", $page_vars, array("order_by" => "added_on")); ?>' <? if ($safe_order_by == "added_on") {print "class='selected'";} ?>>date added</a>
 or <a href='<? plinkto("links.php", $page_vars, array("order_by" => "cited")); ?>' <? if ($safe_order_by == "cited") {print "class='selected'";} ?>>popularity</a>
 <?
@@ -60,7 +62,11 @@ blogs<br/>
 <a <? if ($safe_timeframe == "1w") {print "class='selected'";}?> href='<? plinkto("links.php", $page_vars, array("timeframe" => "1w")); ?>'>week</a>, 
 <a <? if ($safe_timeframe == "1m") {print "class='selected'";}?> href='<? plinkto("links.php", $page_vars, array("timeframe" => "1m")); ?>'>month</a> or
 <a <? if ($safe_timeframe == "3m") {print "class='selected'";}?> href='<? plinkto("links.php", $page_vars, array("timeframe" => "3m")); ?>'>three months</a>
-<h3>Subscribe</h3>
+</div>
+</div>
+<div class='sidebox'>
+<div class='sidebox_title'>Subscribe</div>
+<div class='sidebox_content'>
 <? 
 	if ($safe_category) {
 		print "<p>Subscribe to links in the ".strtolower($safe_category)." category:";
@@ -71,6 +77,8 @@ blogs<br/>
 	feedbox("Latest links (min 4 blogs)", "atom.php?category=$safe_category&type=latest_links&min_links=4");
 	feedbox("Latest links (min 8 blogs)", "atom.php?category=$safe_category&type=latest_links&min_links=8");
 ?>
+</div>
+</div>
 </div>
 <div class='content'>
 <?
