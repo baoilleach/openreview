@@ -15,7 +15,9 @@ use XML::Simple;
 
 # as HTTP::OAI::Harvester is a pain in the ass to find for Windows users we'll make it optional.
 if (($config{"collect_papers"}) || ($config{"collect_comments"})) {
-	use HTTP::OAI::Harvester;
+	my $module = "HTTP::OAI::Harvester";
+	eval("use $module");
+	die("Couldn't load $module : $!n") if ($@);
 }
 
 use HTML::TreeBuilder;
