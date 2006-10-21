@@ -23,7 +23,7 @@ system("perl generate_xml.pl"); # generate flatfiles of new papers.
 system("perl wipe_cache.pl"); # wipe cache of interface
 
 if ($config{"do_search"}) {
-	system("./index.py"); # index those flatfiles
+	system("python index.py"); # index those flatfiles
 }
 
 system("perl cleanup.pl"); # clean up the cache
