@@ -8,6 +8,7 @@ use strict;
 use DBI;
 use config qw(%config log log_error urldecode $DEBUG);
 use XML::Simple;
+use helper qw(download_url);
 use Digest::MD5 qw(md5_hex);
 
 my $connection_string = sprintf("dbi:mysql:%s:%s", $config{"db_name"}, $config{"db_host"});
@@ -30,9 +31,16 @@ while (my $row = $sql->fetchrow_hashref()) {
 	}
 
 	if ($active) {
-		my $run = sprintf("curl -L -m 30 -e %s -A \"%s\" -z %s -o %s %s", $config{"referrer"}, $config{"user_agent"}, $outfile, $outfile, $feed_url);
+		#my $run = sprintf("curl -L -m 30 -e %s -A \"%s\" -z %s -o %s %s", $config{"referrer"}, $config{"user_agent"}, $outfile, $outfile, $feed_url);
 		print STDERR $row->{"title"}."\n";
-		system($run);
+		#system($run);
+		my $feed = download_url($feed_url, 1, 0, $outfile);
+		
+		if ($feed) {
+			open(FEED, ">$outfile");
+			print FEED $feed;
+			close(FEED);
+		}
 	} else {
 		# remove deactivated feeds from the feeds dir
 		if (-e $outfile) {system("rm $outfile");}

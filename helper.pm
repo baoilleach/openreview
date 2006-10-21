@@ -138,6 +138,7 @@ sub download_url {
 	my $url = $_[0];
 	my $override_temp = $_[1];
 	my $bypass_proxy = $_[2];
+	my $compare_timestamps_with = $_[3];
 	
 	$url =~ s/&#038;/&/g;
 	
@@ -156,6 +157,11 @@ sub download_url {
 	}
 	if ($bypass_proxy) {$proxy = "";}
 	
+	my $timestamps = "";
+	if ($compare_timestamps_with) {
+		$timestamps = "-z $compare_timestamps_with";
+	}
+	
 	my $agent = $config{"user_agent"};
 	
 	# hack to stop Connotea from throttling us
@@ -166,7 +172,7 @@ sub download_url {
 	my $silent = "-s";
 	if ($config{"curl_verbose"}) {$silent = "";}
 	
-	my $results = `curl $proxy -L -g $silent -m 30 -A "$agent" "$url"`;
+	my $results = `curl $proxy -L -g $silent -m 30 $timestamps -A "$agent" "$url"`;
 	
 	# write file to cache, unless override_temp is on.
 	if (!$override_temp) {
