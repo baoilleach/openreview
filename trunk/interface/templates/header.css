@@ -13,6 +13,9 @@
 	background-image: url('logo.gif');
 	background-repeat: no-repeat;
 	height: 58px;
+	padding-left: 65px;
+	font-size: 26pt;
+	font-weight: bold;
 }
 
 .title_logo a {color: #FFFFFF; border: 0;}
