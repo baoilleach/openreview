@@ -12,7 +12,12 @@ use strict;
 use DBI;
 use config qw(%config urlencode log log_error do_sleep urldecode $DEBUG parse_post_xml url_breakdown trim);
 use XML::Simple;
-use HTTP::OAI::Harvester;
+
+# as HTTP::OAI::Harvester is a pain in the ass to find for Windows users we'll make it optional.
+if (($config{"collect_papers"}) || ($config{"collect_comments"})) {
+	use HTTP::OAI::Harvester;
+}
+
 use HTML::TreeBuilder;
 use Digest::MD5 qw(md5_hex);
 use SOAP::Lite;

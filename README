@@ -17,12 +17,12 @@ To initialize the database:
 1) Connect to your MySQL server as a user that has permission to create databases
 2) Type
 	
-	CREATE DATABASE pg_posts
+	CREATE DATABASE pg_posts;
 
 (you can replace 'pg_posts' with any name you like)
 3) Create a user with read / write privileges on the database you just created:
 
-	GRANT ALL ON pg_posts.* TO 'user'@'%' IDENTIFIED BY 'password'
+	GRANT ALL ON pg_posts.* TO 'user'@'%' IDENTIFIED BY 'password';
 
 (remember to replace user and password with something more appropriate)
 3) Exit 
