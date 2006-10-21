@@ -9,7 +9,7 @@ use config qw(%config);
 use strict;
 
 system("perl get_feeds.pl"); # download feeds
-system("./parse_feed.py"); # extract posts from feeds, put into flatfiles
+system("python parse_feed.py"); # extract posts from feeds, put into flatfiles
 system("perl update_posts.pl"); # put new posts into the database
 system("perl update_feeds.pl"); # update feed names, descriptions etc.
 system("perl get_links.pl"); # get all URLs from posts
@@ -32,7 +32,7 @@ system("perl generate_xml.pl"); # generate flatfiles for papers in the database
 system("perl wipe_cache.pl"); # wipe cache of interface
 
 if ($config{"do_search"}) {
-	system("./index.py"); # add new items to Lucene index
+	system("python index.py"); # add new items to Lucene index
 }
 
 # dump current version of the database
