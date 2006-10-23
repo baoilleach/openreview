@@ -1,3 +1,32 @@
+POSTGENOMIC
+===========
+
+Postgenomic is an academic blog aggregator. It aggregates blog posts and collects metadata about any papers or books that get referenced by those blog posts.
+
+Postgenomic is open source and is released under the GPL 2.0 licence.
+
+Requirements
+============
+
+To make full use of Postgenomic you'll need:
+
+Python (http://www.python.org)
+Perl (http://www.perl.com)
+PHP (http://www.php.net)
+A web server (http://httpd.apache.org)
+MySQL (http://www.mysql.com)
+curl (http://curl.haxx.se/)
+
+And some Perl modules, namely:
+
+DBI
+Config::Natural
+Lingua::EN::Fathom
+HTTP::TreeBuilder
+HTTP::OAI::Harvester
+
+You can get these from CPAN or (on Windows) through ActiveState's PPM, the exception being HTTP::OAI::Harvester: I haven't found a Windows version of this yet which means that you can't collect metadata via OAI-PMH under Windows.
+
 Installing Postgenomic
 ======================
 
@@ -52,18 +81,37 @@ base_url should be the address of your Postgenomic installation - for example, i
 
 path_to_pipeline should be the complete path to the "openreview" directory created by the svn command. path_to_interface should be the complete path to the "interface" subdirectory.
 
-feeds should point to the OPML file in the "conf" subdirectory (or a custom OPML file listing blogs to add to the database, if you prefer).
+Logging in as admin
+===================
 
-To bootstrap the database:
+Fire up your browser and visit your Postgenomic installation.
+Go to the "login.php" page (which isn't linked to: you'll have to type it into the browser address bar e.g. http://localhost/login.php)
+Enter a username and password, then check the "I'm a new user" checkbox
+The first user you create will automatically get admin privileges - an "Admin" tab should appear on the menubar. Click on it to get to interfaces where you can add new blogs and assign privileges to other users (eventually).
 
-1) Go to the root pipeline directory (the one created by svn)
-2) Type
+Now you'll want to try out adding some blogs to the index. You can do this two ways:
+
+Option 1: Import blogs with OPML
+================================
+
+1) Create an OPML file containing some blogs (note that many popular feed readers can export OPML). The OPML 'folders' will be used as tags.
+2) Make sure that 'feeds' in the config files points to your OPML file.
+3) Go to the root pipeline directory (the one created by svn)
+4) Type
 
 	utils/sync_opml.pl
 	
-This will seed the database with a bunch of science blogs (skip this step, if you like, and go straight to "logging in as admin")
+Option 2: Use the admin interface
+=================================
 
-Running Postgenomic for the first time:
+1) Follow the "logging in as admin" steps above
+2) Click on the Admin tab, then "Manage Blogs"
+3) Underneath the "Add Blogs" title is a large textbox. Paste the URLs of any feeds you want to index in this box, separated by newlines (hit return after each one). If you have a large number of blogs to input I suggest that you do them in batches of a dozen or so, or the web server will timeout.
+4) Hit "Submit". Postgenomic will retrieve the blog titles and descriptions and add them to the database (this may take some time). 
+5) You should now see some blogs listed in the "blog workspace". To put them into categories type the category name into the "create a custom tag?" box. After you enter the next batch of blogs any custom tags will appear in the "Tags:" area underneath every blog: click on any of these tags to assign them to that blog. Assigned tags are in bold. 
+
+Running Postgenomic for the first time
+======================================
 
 1) Type
 
@@ -80,16 +128,20 @@ Voila! Fire up your web browser and go see what's there.
 Run ./pipeline.pl once a day.
 Run ./weekly_pipeline.pl once a week.
 
-Logging in as admin:
+Good luck.
 
-Fire up your browser and visit your Postgenomic installation.
-Go to the "login.php" page (which isn't linked to: you'll have to type it into the browser address bar)
-Enter a username and password, then check the "I'm a new user" checkbox
-The first user you create will automatically get admin privileges - an "Admin" tab should appear on the menubar. Click on it to get to interfaces where you can add new blogs and assign privileges to other users (eventually).
+Further help
+============
 
-Good luck. Don't hesitate to email me if there are any problems....
-
-Euan
+Don't hesitate to email me if there are any problems....
 
 e.adie@nature.com
 
+There's a project homepage on Google Code that lists some known issues etc. at: http://code.google.com/p/openreview/
+
+Also check out the mailing list (not very high traffic at all): http://groups.google.com/group/openreview
+
+Making modifications to the code
+================================
+
+It'd be great if you submitted your modifications back to the community. Email me and I'll add you to the subversion "write" list.
