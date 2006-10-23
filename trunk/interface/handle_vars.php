@@ -17,6 +17,9 @@
 	global $global_categories;
 	$global_categories = get_all_categories();
 	if (!in_array($safe_category, $global_categories)) {$safe_category = false;}
+	
+	# include any extra conf files
+	get_extra_conf($safe_category);	
 		
 	global $page_vars;
 	
