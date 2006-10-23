@@ -61,10 +61,7 @@
 	
 	$page_vars['tag'] = $safe_tag;
 	
-	
-	# terms are now handled by the code below...
-	#$filters['term'] = $safe_term;
-	
+	# code to handle terms: slightly complicated because we want to give a "don't restrict to this category" option
 	$page_vars['term'] = $safe_term;
 	if ($safe_term) {
 		$pterms = explode(",", $safe_term);
@@ -126,12 +123,35 @@
 </div>
 <div class='content'>
 <?	
+	$this_category_rows = 0;
+	$every_category_rows = 0;
+	
 	if ($output_available) {
+		if ($safe_term) {
+			$subfilters = $filters;
+			$subfilters['category'] = false;
+			$all_posts = get_posts($safe_order_by, $subfilters);
+			if ($all_posts) {
+				$every_category_rows = $all_posts[0]["rows_returned"];
+			}			
+		}
 		$posts = get_posts($safe_order_by, $filters);
+		if ($posts) {
+			$this_category_rows = $posts[0]["rows_returned"];
+		}
 	}
 	
 	# pagination control
 	if ($posts) {
+		if ($every_category_rows > $this_category_rows) {
+			# if we got rid of the category restriction then we could show more posts...
+			if ($every_category_rows >= 2) {$all_posts_end = "<b>".$every_category_rows."</b> posts";} else {$all_posts_end = "<b>one</b> post";}
+			if ($this_category_rows >= 2) {$posts_end = "are <b>".$this_category_rows."</b> posts";} else {$posts_end = "is <b>one</b> post";}		
+			printf("
+<div class='message'>
+There %s in the %s category containing this term and %s in all categories - <a href='%s'>click here</a> to see them too.
+</div>", $posts_end, $safe_category, $all_posts_end, linkto("posts.php", $page_vars, array("category" => false)));
+		}
 		print_pagination($posts, $safe_skip, "posts.php", $GLOBALS["config"]['posts_per_page']);
 		foreach ($posts as $post) {
 			$display_filters = array("image" => true);
