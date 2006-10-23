@@ -14,11 +14,14 @@
 			}
 		}
 	}
-	$config_file = file_get_contents($config_file);
-		
+	
+	$config = array();	
+	$data = file_get_contents($config_file);
+	parse_config_file($data);
+	
+function parse_config_file($data) {
 	global $config;
-	$config = array();
-	$config_lines = preg_split("/[\n\r]/", $config_file);
+	$config_lines = preg_split("/[\n\r]/", $data);
 
 	foreach ($config_lines as $config_line) {
 		$matches = array();
@@ -26,6 +29,7 @@
 			$config[$matches[1]] = $matches[2];
 		}
 	}
+}
 
 	# to debug, uncomment the line below
 	# foreach ($config as $key => $val) {print "$key ==> $val\n";}

@@ -24,16 +24,9 @@
 ?>
 <div class='content fullwidth'>
 <div class='frontpage_welcome'>
-<h1>Welcome to Postgenomic</h1>
-<p>Postgenomic collects data from hundreds of science blogs and then does useful and interesting things with it.
-<p>With Postgenomic, you can:
-<ul>
-<li>Find, read and subscribe to new <a href='<? plinkto("blogs.php", $page_vars); ?>'>science blogs</a>
-<li>Find out what scientists are saying about <a href='<? plinkto("papers.php", $page_vars); ?>'>the latest papers</a>
-<li>Read <a href='<? plinkto("posts.php", $page_vars, array("tag" => "review")); ?>'>mini-reviews</a>, <a href='<? plinkto("posts.php", $page_vars, array("tag" => "conference")); ?>'>conference reports</a> or even <a href='<? plinkto("posts.php", $page_vars, array("tag" => "original_research")); ?>'>original research</a>	
-<li>See the buzz surrounding <a href='<? plinkto("links.php", $page_vars); ?>'>different websites</a>
-<li>Browse different subject areas - <a href='<? plinkto("index.php", $page_vars, array("category" => "Chemistry")); ?>'>chemistry</a>, <a href='<? plinkto("index.php", $page_vars, array("category" => "Bioinformatics")); ?>'>bioinformatics</a>, <a href='<? plinkto("index.php", $page_vars, array("category" => "Neuroscience")); ?>'>neuroscience</a>, the <a href='<? plinkto("index.php", $page_vars, array("category" => "Life%20Sciences")); ?>'>life sciences</a>... see the "Explore" options on the top right hand side of the page for more.
-</ul>
+<?
+	print get_blurb("frontpage", $safe_category);
+?>
 </div>
 <div class='frontpage_tabs'>
 <?

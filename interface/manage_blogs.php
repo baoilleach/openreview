@@ -48,7 +48,7 @@ if ($_POST['blogs']) {
 				if ($title && $home_url) {
 					$blog_image = $config['default_image'];
 					if ($config['default_image_alternate']) {
-						if (rand(10) <= 5) {
+						if (rand(0,10) <= 5) {
 							$blog_image = $config['default_image_alternate'];
 						}
 					}

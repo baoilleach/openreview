@@ -112,15 +112,15 @@
 	}
 
 	$frontpage_name = "Home";
-	if (strlen($safe_category)) {
-		print_menu_item("index.php", $safe_category, "index");
-		$frontpage_name = "All categories";
-		print_menu_item("index.php", $frontpage_name, "main_index", array("category" => false));	
-	} else {
-		print_menu_item("index.php", $frontpage_name, "index", array("category" => false));
-	}
+	#if (strlen($safe_category)) {
+	print_menu_item("index.php", "Home", "index");
+	#	$frontpage_name = "All categories";
+	#	print_menu_item("index.php", $frontpage_name, "main_index", array("category" => false));	
+	#} else {
+	#	print_menu_item("index.php", $frontpage_name, "index", array("category" => false));
+	#}
 	
-	if ($config['collect_papers']) {print_menu_item("papers.php", "Books &amp; Papers", "papers");}
+	if ($config['collect_papers']) {print_menu_item("papers.php", "Literature", "papers");}
 	if ($config['collect_links']) {print_menu_item("links.php", "Links", "links");}
 	print_menu_item("posts.php", "Posts", "posts");
 	print_menu_item("blogs.php", "Blogs", "blogs");

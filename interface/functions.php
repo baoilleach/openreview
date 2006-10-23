@@ -1,8 +1,8 @@
 <?
 	include_once("dbconnect.php");
-	include_once("paper_functions.php");
-	include_once("template_functions.php");	
 	include_once("blog_functions.php");
+	include_once("template_functions.php");				
+	include_once("paper_functions.php");
 	include_once("atom_functions.php");
 	include_once("tag_functions.php");
 	include_once("post_functions.php");
@@ -13,11 +13,9 @@
 	include_once("cache_functions.php");
 	include_once("search_functions.php");
 	include_once("login_functions.php");
+	
 	include_once("handle_vars.php");
-	include_once("handle_users.php");	
-
-
-
+	include_once("handle_users.php");
 
 # we could be collecting images from posts involved in term bursts with the get_bursts_images.pl script...
 # still working on this.
