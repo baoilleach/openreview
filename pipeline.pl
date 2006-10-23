@@ -19,6 +19,7 @@ if ($config{"collect_links"}) {
 	system("perl name_links.pl"); # get titles for links
 }
 
+system("perl get_amazon.pl"); # get book metadata from Amazon
 if ($config{"collect_papers"}) {
 	system("perl parse_links.pl"); # follow links to see if they lead to papers
 }

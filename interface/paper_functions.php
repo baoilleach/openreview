@@ -129,7 +129,9 @@ function get_papers($sort_by = "added_on", $filters = array()) {
 		if ($blogs) {$where_clause .= " AND (";}
 		foreach ($blogs as $blog) {
 			if ($blog_counter >= 1) {$where_clause .= " OR ";}
-			$where_clause .= "FIND_IN_SET($blog, blog_ids)";
+			#$where_clause .= "FIND_IN_SET($blog, blog_ids)";
+			# try a textual IN clause to see if it's any faster:
+			$where_clause .= "$blog IN (blog_ids)";
 			$blog_counter++;
 		}
 		if ($blogs) {$where_clause .= ")";}
@@ -138,6 +140,13 @@ function get_papers($sort_by = "added_on", $filters = array()) {
 		$papers = get_papers_with_tag($filters['tag']);
 		$papers = "'".implode("','", $papers)."'";
 		$where_clause .= " AND paper_id IN ($papers)";
+	}
+	if (strtolower($filters['type']) == "books") {
+		$where_clause .= " AND !ISNULL(isbn_id)";
+	}
+	
+	if (strtolower($filters['type']) == "papers") {
+		$where_clause .= " AND ISNULL(isbn_id)";
 	}
 	if ($filters['journal']) {
 		$journal = $filters['journal'];
@@ -190,100 +199,4 @@ function get_papers($sort_by = "added_on", $filters = array()) {
 	
 	return $papers;
 }
-
-# return an array of Paper objects. Filters can be to limit the number of papers returned,
-# to restrict to papers from a particular field or journal, pubdate range etc.
-function old_get_papers($sort_by = "added_on", $filters = array()) {
-	$query = "SELECT SQL_CALC_FOUND_ROWS papers.*, links.url AS url, COUNT(DISTINCT posts.blog_id) AS cited_by FROM papers, links, posts WHERE posts.post_id = links.post_id AND links.paper_id = papers.paper_id ";
-	$where_clause = "";
-	$order_by = " ORDER BY added_on";
-	$group_by = " GROUP BY papers.paper_id";
-	$limit_by = "";
-
-	if ($sort_by == "added_on") {$order_by = " ORDER BY added_on DESC";}
-	if ($sort_by == "pubdate") {$order_by = " ORDER BY pubdate DESC";}
-	# bit of a hack here - historically "pubdate" and "published_on" are both used even though they're the same thing
-	if ($sort_by == "published_on") {$order_by = " ORDER BY pubdate DESC";}
-	if ($sort_by == "cited") {$order_by = " ORDER BY cited_by DESC";}
-	if ($sort_by == "journal") {$order_by = " ORDER BY journal";}
-	
-	if ($filters['min_links']) {
-		$having_clause .= " HAVING cited_by >= ".$filters['min_links'];
-	}
-	
-	if ($filters['reviews']) {
-		$where_clause .= " AND Links.type='review'";
-	}
-
-	if ($filters['limit']) {
-		$limit_by = " LIMIT ".$filters['limit'];
-	}
-
-	if ($filters['skip']) {
-		if ($filters['skip'] < 0) {$filters['skip'] = 0;}
-		$limit_by = " LIMIT ".$filters['skip'].",".$GLOBALS["config"]['papers_per_page'];
-	}
-		
-	if ($filters['category']) {
-		$blogs = get_blogs_with_tag($filters['category']);
-		$blogs = "'".implode("','", $blogs)."'";
-		$where_clause .= " AND posts.blog_id IN ($blogs)";
-	}
-	if ($filters['tag']) {
-		$papers = get_papers_with_tag($filters['tag']);
-		$papers = "'".implode("','", $papers)."'";
-		$where_clause .= " AND papers.paper_id IN ($papers)";
-	}
-	if ($filters['journal']) {
-		$journal = $filters['journal'];
-		$where_clause .= " AND papers.journal='$journal'";
-	}
-	if ($filters['published_before']) {
-		$date = $filters['published_before'];
-		$where_clause .= " AND papers.pubdate < '$date'";
-	}
-	if ($filters['published_after']) {
-		$date = $filters['published_after'];
-		$where_clause .= " AND papers.pubdate >= '$date'";
-	}
-	if ($filters['added_before']) {
-		$date = $filters['added_before'];
-		$where_clause .= " AND papers.added_on < '$date'";
-	}
-	if ($filters['added_after']) {
-		$date = $filters['added_after'];
-		$where_clause .= " AND papers.added_on >= '$date'";
-	}
-	if (isset($filters['paper_id'])) {
-		if (!is_array($filters['paper_id'])) {
-			$where_clause .= " AND papers.paper_id = ".$filters['paper_id'];
-		} else if (is_array($filters['paper_id'])) {
-			$where_clause .= " AND papers.paper_id IN (".implode(",", $filters['paper_id']).")";
-		}
-	}
-
-	$papers = array();
-
-	$query = $query.$where_clause.$group_by.$having_clause.$order_by.$limit_by;	
-
-	$results = mysql_query($query);
-
-	$rows = mysql_num_rows($results);
-	if ($limit_by) {
-		$count_query = "SELECT FOUND_ROWS() AS rows";
-		$count_results = mysql_query($count_query);
-		while ($row = mysql_fetch_assoc($count_results)) {
-			$rows = $row['rows'];
-		}
-	}
-
-	while ($row = mysql_fetch_assoc($results)) {
-		$row['rows_returned'] = $rows;
-		$paper = $row;
-		array_push($papers, $paper);
-	}
-	
-	return $papers;
-}
-
 ?>

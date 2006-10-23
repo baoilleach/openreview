@@ -509,7 +509,7 @@ function print_paper($paper, $filters = array()) {
 			print print_rating($paper['cited_by'], linkto("paper.php", $page_vars, array("paper_id" => $paper['paper_id'])));
 		}
 		
-		print " published in <a href='".linkto("journal_search.php", $GLOBALS['page_vars'], array("journal_id" => $paper['journal']))."'>".$paper['journal']."</a> on <span class='date'>".date("D jS M y", strtotime($paper['pubdate']))."</span>";
+		print " published by <a href='".linkto("journal_search.php", $GLOBALS['page_vars'], array("journal_id" => $paper['journal']))."'>".$paper['journal']."</a> on <span class='date'>".date("D jS M y", strtotime($paper['pubdate']))."</span>";
 		if ($filters['show_abstract'] == true) {
 				print "<br/><span class='author'>".$paper['authors']."</span>";
 		}
@@ -525,8 +525,26 @@ function print_paper($paper, $filters = array()) {
 	}	
 	
 	if (($filters['show_abstract']) && ($paper['abstract'])) {
-		print "<div class='paperbox_abstract'>";		
+		print "<div class='paperbox_identifiers'>";
+			if ($paper['doi_id']) {
+				printf("DOI <a href='%s'>%s</a> ", "http://dx.doi.org/".$paper['doi_id'], $paper['doi_id']);
+			}
+			if ($paper['isbn_id']) {
+				printf("ISBN <a href='%s'>%s</a> ", "http://isbndb.com/search-all.html?kw=".$paper['isbn_id'], $paper['isbn_id']);
+			}
+			if ($paper['pubmed_id']) {
+				printf("PMID <a href='%s'>%s</a> ", "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&list_uids=".$paper['pubmed_id'], $paper['pubmed_id']);				
+			}
+			if ($paper['arxiv_id']) {
+				printf("OAI <a href='%s'>%s</a> ", "http://www.citebase.org/abstract?id=".urlencode($paper['arxiv_id']), $paper['arxiv_id']);				
+			}
+		print "</div>";
+		print "<div class='paperbox_abstract'>";	
+		if ($paper['image']) {
+			print "<div class='paperbox_thumbnail'><img src='".$paper['image']."'/></div>";
+		}
 		print $paper['abstract'];
+		print "<div class='paperbox_footer'>&nbsp;</div>";
 		print "</div>";
 	}
 	

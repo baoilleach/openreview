@@ -48,9 +48,11 @@ $sql->execute();
 
 my $sql = $db->prepare("
 INSERT INTO papers_summary
-(paper_id, doi_id, pubmed_id, arxiv_id, pii_id, journal, title, abstract, authors, pubdate, added_on, url, cited_by, reviewed, blog_ids)
+(paper_id, isbn_id, image, doi_id, pubmed_id, arxiv_id, pii_id, journal, title, abstract, authors, pubdate, added_on, url, cited_by, reviewed, blog_ids)
 SELECT 
 papers.paper_id,
+papers.isbn_id,
+papers.image,
 papers.doi_id,
 papers.pubmed_id,
 papers.arxiv_id,

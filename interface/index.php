@@ -94,7 +94,7 @@ print "</div>";
 <?
 	$papers = get_top_papers($safe_category, $last_fortnight);
 	if (($config['collect_papers']) && (sizeof($papers))) {
-		print "<div class='tab_title'>Popular papers this week</div>";
+		print "<div class='tab_title'>Popular books &amp; papers this week</div>";
 		
 		foreach ($papers as $paper) {print_paper($paper, array("display" => "minimal", "show_byline" => true));}
 		print "<div class='read_more'><a href='".linkto("papers.php", $page_vars, array("order_by" => "cited", "timeframe" => "1m"))."'>read more recently popular papers...</a></div>";

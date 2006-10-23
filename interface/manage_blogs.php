@@ -65,7 +65,7 @@ if ($_POST['blogs']) {
 	}
 }
 ?>
-<h3>Add Blogs</h3>
+<h1>Add Blogs</h1>
 <form action='manage_blogs.php' method='POST'>
 <p>Type or paste one or more feed URLs here, separated by newlines.
 <p>Note that new blogs won't appear on the site until the next time that the pipeline is run.

@@ -1,7 +1,7 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "suggest";
-	$PAGE_TITLE = "Postgenomic - Suggest blogs";
+	$PAGE_TITLE = $config["name"]." - Suggest blogs";
 ?>
 <? include("header.php"); ?>
 <div class='content'>
