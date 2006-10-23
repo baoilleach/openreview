@@ -92,9 +92,10 @@
 </div>
 <div class='title_menu'>
 <div class='title_login'>
+
 <?
 	if ($logged_on) {
-		print "Logged on as $logged_on (<a href='".linkto("index.php", $page_vars, array("logout" => true))."'>log out</a>)";
+		print "<div class='login_button'><a href='".linkto("index.php", $page_vars, array("logout" => true))."'>Logged in as <b>$logged_on</b> (log out)</a></div>";
 	} else {
 		#print "<a href='".linkto("login.php", $page_vars)."'>log in or register</a>";
 	}

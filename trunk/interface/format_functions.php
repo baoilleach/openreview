@@ -375,7 +375,7 @@ function print_termcloud($tags, $prefs = array()) {
 		if ($bin > $bins) {$bin = $bins;} 
 		$target = "";
 		if ($prefs['target']) {$target = "target='".$prefs['target']."'";}
-		print "<a class='tagcloud_$bin' $target href='".linkto("posts.php", $GLOBALS['page_vars'], array("term" => $key, "order_by" => "cited", "category" => "false"))."'>$key</a> ";
+		print "<a class='tagcloud_$bin' $target href='".linkto("posts.php", $GLOBALS['page_vars'], array("term" => $key, "order_by" => "cited"))."'>$key</a> ";
 	}
 	print "</div>";
 }
@@ -459,6 +459,7 @@ function print_pagination($papers = array(), $safe_skip = 0, $link_to = "papers.
 # print paper with paper_id $id
 function print_paper($paper, $filters = array()) {
 	global $logged_on;
+	global $page_vars;
 	
 	$paper_id = $paper['paper_id'];
 	
@@ -832,7 +833,11 @@ function print_blog($blog, $filters = array()) {
 		
 	// title
 	print "<div class='blogbox_title'>";	
-	print "<a href='".linkto("blog_search.php", $page_vars, array("blog_id" => $blog['blog_id']))."'>".$blog['title']."</a>";
+	if ($filters['link']) {
+		print "<a href='".$blog['url']."'>".$blog['title']."</a>";
+	} else {
+		print "<a href='".linkto("blog_search.php", $page_vars, array("blog_id" => $blog['blog_id']))."'>".$blog['title']."</a>";		
+	}
 	print "</div>";
 
 	// thumbnail

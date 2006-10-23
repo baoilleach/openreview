@@ -56,7 +56,7 @@
 <div class='content fullwidth'>
 <?
 	if ($error_message) {
-		print "<div class='errorbox'>";
+		print "<div class='message'>";
 		print $error_message;
 		print "</div>";
 	}

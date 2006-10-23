@@ -36,7 +36,7 @@
 <?	
 	if ($safe_blog_id) {
 		if ($details) {
-			print_blog($details, array("magnify" => true, "tagcloud" => true));			
+			print_blog($details, array("link" => true, "tagcloud" => true));			
 		} else {
 			print_error("Couldn't get blog details", "Sorry, I couldn't retrieve the details of the blog that you're looking for.");
 		}
