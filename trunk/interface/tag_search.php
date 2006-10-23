@@ -3,7 +3,7 @@
 	$safe_tag = mysql_escape_string($_GET['tag']);
 	
 	$PAGE_TYPE = "search";
-	$PAGE_TITLE = "Postgenomic - Items tagged $safe_tag";
+	$PAGE_TITLE = $config["name"]." - Items tagged $safe_tag";
 ?>
 <? include("header.php"); ?>
 <?

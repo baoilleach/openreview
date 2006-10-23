@@ -1,10 +1,11 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "papers";
-	$PAGE_TITLE = "Postgenomic - Papers";
+	$PAGE_TITLE = $config["name"]." - Books & Papers";
 	$PAGE_CACHE = 1;
 ?>
 <? include("header.php"); ?>
+<? include("papers_menu.php"); ?>
 <?
 	$filters = array();
 	$safe_timeframe = mysql_escape_string($_GET['timeframe']);
@@ -49,7 +50,10 @@
 	$filters['published_after'] = $safe_pubdate_start;
 	$filters['min_links'] = $safe_min_links;
 	$filters['comment_source'] = $safe_comment_source;
+	
+	if ($_SAFE['area']) {$filters['type'] = $_SAFE['area'];}
 
+	if ($_SAFE['area']) {$page_vars["area"] = $_SAFE['area'];}
 	if ($safe_journal) {$page_vars["journal"] = $safe_journal;}
 	if (isset($safe_min_links)) {$page_vars['min_links'] = $safe_min_links;}
 	if ($safe_timeframe) {$page_vars['timeframe'] = $safe_timeframe;}

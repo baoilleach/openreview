@@ -67,7 +67,9 @@
 		plinkto("index.php");
 	}
 	
-	?>?category="+ this.options[this.selectedIndex].value'>
+	?>?category="+ this.options[this.selectedIndex].value<?
+	if ($_SAFE['area']) {print " + \"&area=".$_SAFE['area']."\"";}	
+	?>'>
 		<option>Any</option>
 	<?
 		foreach ($global_categories as $tag) {
@@ -113,11 +115,12 @@
 	if (strlen($safe_category)) {
 		print_menu_item("index.php", $safe_category, "index");
 		$frontpage_name = "All categories";
+		print_menu_item("index.php", $frontpage_name, "main_index", array("category" => false));	
+	} else {
+		print_menu_item("index.php", $frontpage_name, "index", array("category" => false));
 	}
-
-	print_menu_item("index.php", $frontpage_name, "main_index", array("category" => false));
-
-	if ($config['collect_papers']) {print_menu_item("papers.php", "Papers", "papers");}
+	
+	if ($config['collect_papers']) {print_menu_item("papers.php", "Books &amp; Papers", "papers");}
 	if ($config['collect_links']) {print_menu_item("links.php", "Links", "links");}
 	print_menu_item("posts.php", "Posts", "posts");
 	print_menu_item("blogs.php", "Blogs", "blogs");

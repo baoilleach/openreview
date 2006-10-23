@@ -1,7 +1,7 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "blogs";
-	$PAGE_TITLE = "Postgenomic - Blog details";
+	$PAGE_TITLE = $config["name"]." - Blog details";
 ?>
 <? include("header.php"); ?>
 <? include("blogs_menu.php"); ?>

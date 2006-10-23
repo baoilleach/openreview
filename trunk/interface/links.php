@@ -1,7 +1,7 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "links";
-	$PAGE_TITLE = "Postgenomic - Links";
+	$PAGE_TITLE = $config["name"]." - Links";
 	$PAGE_CACHE = 1;
 ?>
 <? include("header.php"); ?>

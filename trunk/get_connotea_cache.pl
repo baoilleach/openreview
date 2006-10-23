@@ -16,9 +16,10 @@ use Digest::MD5 qw(md5_hex);
 
 if (!$config{"connotea_username"}) {
 	log("script complete: no Connotea username and password supplied.");
+	exit;
 }
 
-my $connection_string = sprintf("dbi:mysql:%s:%s", $config{"connotea_db_name"}, $config{"connotea_db_host"});
+my $connection_string = sprintf("dbi:mysql:%s:%s", $config{"db_name"}, $config{"db_host"});
 my $db = DBI->connect($connection_string, $config{"db_user"}, $config{"db_password"}) or log_error("Couldn't connect to the database.\n");
 
 my $max_results = 5000; # don't get more than 5000 results from Connotea.

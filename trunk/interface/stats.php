@@ -1,7 +1,7 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "zeitgeist";
-	$PAGE_TITLE = "Postgenomic - Zeitgeist";
+	$PAGE_TITLE = $config["name"]." - Zeitgeist";
 	$PAGE_CACHE = 1;
 ?>
 <? include("header.php"); ?>
@@ -106,8 +106,8 @@
 <?
 	} else if ($safe_area == "journals") {
 ?>
-<h1>Journals</h1>
-<h3>Top 50 Journals by Citations</h3>
+<h1>Publishers</h1>
+<h3>Top 50 Publishers by Citations</h3>
 <p>Rankings are based on the number of incoming links from indexed science blogs and some secret Postgenomic sauce.
 <p><br/>
 <table width='100%' cellspacing='0' cellpadding='0'>
@@ -126,8 +126,8 @@
 </td>
 </tr>
 </table>
-<h3>Top 20 Journals by Papers</h3>
-<p>Rankings are based on the number of relevant papers in the database.
+<h3>Top 20 Publishers by Papers</h3>
+<p>Rankings are based on the number of relevant books and papers in the database.
 <p><br/>
 <table width='100%' cellspacing='0' cellpadding='0'>
 <tr>
@@ -145,9 +145,9 @@
 </td>
 </tr>
 </table>
-<h3>All Time Most Popular Papers</h3>
-<p>These are the ten most cited papers in the database. Note that only blog posts are counted as citations - comments and external links (like F1000 reviews or Nature Highlights) are ignored.
-<p>You can see a breakdown of popular papers by journal by clicking on a journal name.
+<h3>All Time Most Popular Books &amp; Papers</h3>
+<p>These are the ten most cited books or papers in the database. Note that only blog posts are counted as citations - comments and external links (like F1000 reviews or Nature Highlights) are ignored.
+<p>You can see a breakdown of popular books or papers by publisher by clicking on a publisher name.
 <p><br/>
 <?
 	$papers = get_papers("cited", array("limit" => 10));
@@ -206,9 +206,9 @@
 <h3>Stats overview</h3>
 <table width='100%' cellspacing='0' cellpadding='0'>
 <tr>
-	<td width='33%' valign='top'><h2>Top Blogs</h2></td>
-	<td width='33%' valign='top'><h2>Top Journals</h2></td>
-	<td width='33%' valign='top'><h2>Top Tags</h2></td>
+	<td width='33%' valign='top'><h3>Top Blogs</h3></td>
+	<td width='33%' valign='top'><h3>Top Publishers</h3></td>
+	<td width='33%' valign='top'><h3>Top Tags</h3></td>
 </tr>
 <tr>
 	<td width='33%' valign='top'>

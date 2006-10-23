@@ -1,7 +1,7 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "search";
-	$PAGE_TITLE = "Postgenomic - Search";
+	$PAGE_TITLE = $config["name"]." - Search";
 ?>
 <? include("header.php"); ?>
 <?

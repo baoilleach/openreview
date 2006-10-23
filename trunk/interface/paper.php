@@ -1,9 +1,10 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "papers";
-	$PAGE_TITLE = "Postgenomic - Paper details";
+	$PAGE_TITLE = $config["name"]." - Books & Papers details";
 ?>
 <? include("header.php"); ?>
+<? include("papers_menu.php"); ?>
 <script language="javascript" type="text/javascript">
 tinyMCE.init({
 	mode : "textareas",

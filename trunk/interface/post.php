@@ -1,7 +1,7 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "posts";
-	$PAGE_TITLE = "Postgenomic - Post details";
+	$PAGE_TITLE = $config["name"]." - Post details";
 ?>
 <? include("header.php"); ?>
 <? include("posts_menu.php"); ?>

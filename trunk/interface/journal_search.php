@@ -1,7 +1,7 @@
 <? include("functions.php"); ?>
 <?
 	$PAGE_TYPE = "zeitgeist";
-	$PAGE_TITLE = "Postgenomic - Journal details";
+	$PAGE_TITLE = $config["name"]." - Journal details";
 
 ?>
 <? include("header.php"); ?>
@@ -16,7 +16,7 @@ if ($safe_journal_id) {
 	$stats = get_journal_stats($safe_journal_id);
 ?>
 <div class='sidebox'>
-<div class='sidebox_title'>Tags associated with this journal</div>
+<div class='sidebox_title'>Tags associated with this publisher</div>
 <div class='sidebox_content'>
 <?
 	$tags = get_tags_for_journal($safe_journal_id, 50);
@@ -44,7 +44,7 @@ if ($stats) {
 <tr>
 <td valign='top' width='*'>
 <?
-	print "<h3>All time most popular papers</h3>";
+	print "<h3>All time most popular books &amp; papers</h3>";
 		$papers = get_papers("cited", array("journal" => $safe_journal_id, "limit" => 5));
 	foreach ($papers as $paper) {
 		print_paper($paper, array("display" => "minimal"));
@@ -57,7 +57,7 @@ if ($stats) {
 ?>
 <td valign='top' width='50%'>
 	<?
-		print "<h3>Recent hot papers</h3>";
+		print "<h3>Recently published hot books &amp; papers</h3>";
 		foreach ($papers as $paper) {
 			print_paper($paper, array("display" => "minimal"));
 		}
@@ -71,7 +71,7 @@ if ($stats) {
 </div>
 <?
 } else {
-	print_error("No journal specified", "Sorry, I'm not sure which journal you're looking for.");
+	print_error("No publisher specified", "Sorry, I'm not sure which publisher you're looking for.");
 }
 ?>
 <? include("footer.php");?>
