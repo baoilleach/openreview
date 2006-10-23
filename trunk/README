@@ -130,6 +130,45 @@ Run ./weekly_pipeline.pl once a week.
 
 Good luck.
 
+Customising look and feel
+=========================
+
+Everything you need to customise the look and feel of Postgenomic can be found in the interface/templates/ directory.
+
+The relevant files are:
+
+basic.css : basic css like anchors, font sizes, how big the sidebar is etc.
+blogs.css : css that controls how blogs look
+header.css : css that controls how the header and menus look
+links.css : css that controls how links look
+papers.css : css that controls how papers and books look
+posts.css : css that controls how posts look
+search.css : css for search boxes
+zeitgeist.css : css for stats and zeitgest pages
+
+blurb.php : defines an array called $blurb that contains chunks of text - things like the welcome message on the front page. Different categories can have different chunks: see below.
+
+Giving different categories different looks
+===========================================
+
+Postgenomic automatically looks for subdirectories in templates/ that match the current category name. The names of these subdirectories shouldn't contain any spaces or non-letter characters (e.g. "Earth & Environment" would become "earthenvironment").
+
+The subdirectories can contain different versions of any of the .css files listed above. If a category-specific css file exists then it is used, otherwise the default templates/ version is used.
+
+For example, to change the link colours for a category called Earth & Environment copy the basic.css file to a subdirectory called "earthenvironment/" in the templates dir and then edit the relevant style there.
+
+You can also create a category specific blurb.php and a supplemental .conf file (this must match the name of the subdirectory - e.g. "physics.conf" for the physics/ subdirectory). These are parsed *AFTER* the default blurb and config files, so you're overwriting the template defaults rather than overriding them.
+
+Some examples (remember to turn off caching to test things out - set 'cache_to = none' in the default config file):
+
+1) You've got a Physics category. Create a physics/ subdirectory under templates/ and then create a file called physics.conf. Add a single line to that file:
+
+name=Hello Physics World
+
+now when you view that category the window title should include "hello physics world"
+
+2) In the physics/ subdirectory create a file called blurb.php. Edit blurb.php and change the blurb array as required e.g $blurb['frontpage'] = "Welcome to the physics frontpage";
+
 Further help
 ============
 
