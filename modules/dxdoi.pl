@@ -8,6 +8,8 @@
 #
 
 use strict;
+use URI::Escape;
+
 use lib ("..");
 
 use helper;
@@ -15,5 +17,9 @@ use helper;
 my $url = $ARGV[0];
 
 if ($url =~ /dx\.doi\.org\/(.+)/i) {
-	print "DOI"."\t".$1."\n";
+	# we need to unescape the doi
+	
+	
+	
+	print "DOI"."\t".uri_unescape($1)."\n";
 }
